@@ -47,6 +47,29 @@ class PatternDao {
         })
         callback(null, "deleted");
     }
+
+    modifyPattern(patternId, updatedPattern, callback) {
+        const query = `
+        UPDATE patterns 
+        SET 
+            pattern_name = ?, 
+            pattern_theme = ?
+        WHERE pattern_id = ?
+    `;
+
+        const values = [
+            updatedPattern.pattern_name,
+            updatedPattern.pattern_theme,
+            patternId
+        ];
+
+        this.db.run(query, values, function(err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, "Pattern Updated");
+        });
+    }
 }
 
 module.exports = {PatternDao};

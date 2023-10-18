@@ -52,6 +52,23 @@ class UserController {
             }
         });
     }
+
+    modifyUser(req, res) {
+        const userData = req.body;
+        if (!userData.user_id) {
+            // Validate that we have the user_id in the request body
+            return res.status(400).send('Missing user ID in request body');
+        }
+
+        this.dao.modifyUser(userData, (err, modifiedUserId) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error modifying the user');
+            } else {
+                res.status(200).json({message: 'User modified successfully', id: modifiedUserId});
+            }
+        });
+    }
 }
 
 module.exports = {UserController};

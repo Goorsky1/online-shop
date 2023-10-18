@@ -50,6 +50,20 @@ class PatternController {
             }
         });
     }
+
+    modifyPattern(req, res) {
+        const id = req.params.id;
+        const updatedPatternData = req.body;
+
+        this.dao.modifyPattern(id, updatedPatternData, (err, message) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error updating pattern');
+            } else {
+                res.status(200).json({ message: message });
+            }
+        });
+    }
 }
 
 module.exports = {PatternController};
