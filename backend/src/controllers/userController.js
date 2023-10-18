@@ -22,7 +22,7 @@ class UserController {
                 console.error(err);
                 res.status(500).send('Error adding a new user');
             } else {
-                res.status(201).json({id: newUserId});
+                res.status(201).json({ id: newUserId });
             }
         });
     }
@@ -35,7 +35,7 @@ class UserController {
                 console.error(err);
                 res.status(500).send('Error getting user by id');
             } else {
-                res.status(200).json({user: user});
+                res.status(200).json({ user: user });
             }
         });
     }
@@ -55,20 +55,16 @@ class UserController {
 
     modifyUser(req, res) {
         const userData = req.body;
-        if (!userData.user_id) {
-            // Validate that we have the user_id in the request body
-            return res.status(400).send('Missing user ID in request body');
-        }
-
-        this.dao.modifyUser(userData, (err, modifiedUserId) => {
+        const id = req.params.id
+        this.dao.modifyUser(id, userData, (err, modifiedUserId) => {
             if (err) {
                 console.error(err);
                 res.status(500).send('Error modifying the user');
             } else {
-                res.status(200).json({message: 'User modified successfully', id: modifiedUserId});
+                res.status(200).json({ message: 'User modified successfully', id: modifiedUserId });
             }
         });
     }
 }
 
-module.exports = {UserController};
+module.exports = { UserController };

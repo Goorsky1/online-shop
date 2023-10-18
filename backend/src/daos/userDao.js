@@ -1,4 +1,4 @@
-const {User} = require("../models/User");
+const { User } = require("../models/User");
 
 class UserDao {
     constructor(db) {
@@ -32,7 +32,7 @@ class UserDao {
         const query = 'SELECT user_id, user_email, user_status, user_phone, user_permissions FROM users WHERE user_id = ?';
         console.log("query:", query)
         console.log("id:", id)
-        this.db.get(query, [id], function(err, row) {
+        this.db.get(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
@@ -42,10 +42,8 @@ class UserDao {
     }
 
     deleteUserById(id, callback) {
-        const query = `UPDATE users SET user_status = 'deleted' WHERE user_id = ?`;
-        console.log("query:", query)
-        console.log("id:", id)
-        this.db.run(query, [id], function(err, row) {
+        const query = `DELETE FROM users WHERE user_id = ?`;
+        this.db.run(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
@@ -53,9 +51,9 @@ class UserDao {
             callback(null, "deleted");
         })
     }
-    modifyUser(user, callback) {
+    modifyUser(id, user, callback) {
         const query = 'UPDATE users SET user_email = ?, user_password = ?, user_status = ?, user_phone = ?, user_permissions = ? WHERE user_id = ?';
-        const values = [user.user_email, user.user_password, user.user_status, user.user_phone, user.user_permissions, user.user_id];
+        const values = [user.user_email, user.user_password, user.user_status, user.user_phone, user.user_permissions, id];
         this.db.run(query, values, function (err) {
             if (err) {
                 return callback(err);
@@ -66,5 +64,5 @@ class UserDao {
 
 }
 
-module.exports = {UserDao};
+module.exports = { UserDao };
 

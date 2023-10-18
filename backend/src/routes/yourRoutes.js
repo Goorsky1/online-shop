@@ -1,13 +1,13 @@
 const express = require('express');
-const {UserController} = require('../controllers/userController');
-const {ProductController} = require('../controllers/productController');
-const {PatternController} = require('../controllers/patternController');
-const {RatingController} = require('../controllers/ratingController');
+const { UserController } = require('../controllers/userController');
+const { ProductController } = require('../controllers/productController');
+const { PatternController } = require('../controllers/patternController');
+const { RatingController } = require('../controllers/ratingController');
 
-const {UserDao} = require("../daos/userDao");
-const {ProductDao} = require("../daos/productDao");
-const {PatternDao} = require("../daos/patternDao");
-const {RatingDao} = require("../daos/ratingDao");
+const { UserDao } = require("../daos/userDao");
+const { ProductDao } = require("../daos/productDao");
+const { PatternDao } = require("../daos/patternDao");
+const { RatingDao } = require("../daos/ratingDao");
 const db = require("../config")
 
 const userDao = new UserDao(db);
@@ -16,16 +16,17 @@ const patternDao = new PatternDao(db);
 const ratingDao = new RatingDao(db);
 
 const router = express.Router();
+
 const userController = new UserController(userDao);
 const productController = new ProductController(productDao);
 const patternController = new PatternController(patternDao);
 const ratingController = new RatingController(ratingDao);
 
 router.get('/users', userController.getAllUsers.bind(userController));
-router.get('/users/:id', userController.getUserById.bind(userController));
-router.patch('/users/:id', userController.deleteUserById.bind(userController));
 router.post('/users', userController.addUser.bind(userController));
-router.patch('/users', userController.modifyUser.bind(userController));
+router.get('/users/:id', userController.getUserById.bind(userController));
+router.patch('/users/:id', userController.modifyUser.bind(userController));
+router.delete('/users/:id', userController.deleteUserById.bind(userController));
 
 router.get('/products', productController.getAllProducts.bind(productController));
 router.post('/products', productController.addProduct.bind(productController));
