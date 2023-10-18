@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "ea0dd418-3ea6-4a75-beb2-69c8fec55638",
+		"_postman_id": "272c3b97-8699-4723-bebf-1f3b2871b044",
 		"name": "SSI Projekt",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26503592",
-		"_collection_link": "https://dark-desert-528862.postman.co/workspace/SSI~b9718538-df9a-4e05-99d8-13d5fa9ae0e4/collection/26503592-ea0dd418-3ea6-4a75-beb2-69c8fec55638?action=share&source=collection_link&creator=26503592"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -45,7 +43,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -53,8 +51,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
-								"1"
+								"users"
 							]
 						}
 					},
@@ -84,7 +81,7 @@
 				{
 					"name": "deleteUser",
 					"request": {
-						"method": "PATCH",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/api/users/2",
@@ -109,7 +106,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 1,\r\n    \"user_email\": \"user11@user.pl\",\r\n    \"user_password\": \"user1\",\r\n    \"user_status\": \"active\",\r\n    \"user_phone\": \"888888888\",\r\n    \"user_permissions\": \"client\"\r\n}",
+							"raw": "{\r\n    \"user_email\": \"user11@user.pl\",\r\n    \"user_password\": \"user1\",\r\n    \"user_status\": \"active\",\r\n    \"user_phone\": \"888888888\",\r\n    \"user_permissions\": \"client\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -117,7 +114,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/users",
+							"raw": "http://localhost:3000/api/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -125,7 +122,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users"
+								"users",
+								"1"
 							]
 						}
 					},
@@ -171,7 +169,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/patterns",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -179,8 +177,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
-								"1"
+								"patterns"
 							]
 						}
 					},
@@ -192,7 +189,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/patterns/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -200,7 +197,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
+								"patterns",
 								"1"
 							]
 						}
@@ -212,6 +209,36 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/patterns/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"patterns",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modifyPattern",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pattern_name\": \"Kotki\",\r\n    \"pattern_theme\": \"Kotunie\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/api/patterns/6",
 							"protocol": "http",
@@ -268,7 +295,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/products",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -276,8 +303,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
-								"1"
+								"products"
 							]
 						}
 					},
@@ -310,7 +336,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/products/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -318,7 +344,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
+								"products",
 								"1"
 							]
 						}
@@ -350,36 +376,6 @@
 								"api",
 								"products",
 								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "modifyPattern",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"pattern_name\": \"Kotki\",\r\n    \"pattern_theme\": \"Kotunie\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/patterns/6",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"patterns",
-								"6"
 							]
 						}
 					},
@@ -490,9 +486,9 @@
 					"response": []
 				},
 				{
-					"name": "modufyRating",
+					"name": "modifyRating",
 					"request": {
-						"method": "PUT",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
