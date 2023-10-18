@@ -33,6 +33,9 @@ router.delete('/products/:id', productController.deleteProductById.bind(productC
 
 router.get('/products/:id/ratings', ratingController.getAllRatingsByProductId.bind(ratingController));
 router.post('/products/:id/ratings', ratingController.addRating.bind(ratingController));
+router.get('/products/:idp/ratings/:idu', ratingController.getRatingByUserIdAndProductId.bind(ratingController));
+router.delete('/products/:idp/ratings/:idu', ratingController.deleteRating.bind(ratingController));
+router.put('/products/:id/ratings', ratingController.modifyRating.bind(ratingController));
 
 router.get('/patterns', patternController.getAllPatterns.bind(patternController));
 router.post('/patterns', patternController.addPattern.bind(patternController));
