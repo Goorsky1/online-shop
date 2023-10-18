@@ -51,6 +51,23 @@ class ProductController {
             }
         });
     }
+
+    modifyProduct(req, res) {
+        console.log('Inside modifyProduct controller');
+        const id = req.params.id;
+        const updatedProductData = req.body;
+        console.log('ID:', id);
+        console.log('Updated Product Data:', updatedProductData);
+
+        this.dao.modifyProduct(id, updatedProductData, (err, message) => {
+            if (err) {
+                console.error('Error in DAO:', err);
+                res.status(500).send('Error updating product');
+            } else {
+                res.status(200).json({ message: message });
+            }
+        });
+    }
 }
 
 module.exports = {ProductController};

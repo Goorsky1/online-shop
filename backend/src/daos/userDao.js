@@ -53,6 +53,17 @@ class UserDao {
             callback(null, "deleted");
         })
     }
+    modifyUser(user, callback) {
+        const query = 'UPDATE users SET user_email = ?, user_password = ?, user_status = ?, user_phone = ?, user_permissions = ? WHERE user_id = ?';
+        const values = [user.user_email, user.user_password, user.user_status, user.user_phone, user.user_permissions, user.user_id];
+        this.db.run(query, values, function (err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, user.user_id);  // Return the ID of the modified user
+        });
+    }
+
 }
 
 module.exports = {UserDao};

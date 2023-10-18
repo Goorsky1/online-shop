@@ -50,6 +50,44 @@ class ProductDao {
             callback(null, "deleted");
         })
     }
+    modifyProduct(productId, updatedProduct, callback) {
+        const query = `
+        UPDATE products 
+        SET 
+            product_name = ?, 
+            product_color = ?, 
+            product_material = ?, 
+            product_diameter = ?, 
+            product_width = ?, 
+            pattern_id = ?, 
+            product_count = ?, 
+            product_price = ?, 
+            product_description = ?, 
+            product_image = ? 
+        WHERE product_id = ?
+    `;
+
+        const values = [
+            updatedProduct.product_name,
+            updatedProduct.product_color,
+            updatedProduct.product_material,
+            updatedProduct.product_diameter,
+            updatedProduct.product_width,
+            updatedProduct.pattern_id,
+            updatedProduct.product_count,
+            updatedProduct.product_price,
+            updatedProduct.product_description,
+            updatedProduct.product_image,
+            productId
+        ];
+
+        this.db.run(query, values, function(err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, "Product Updated");
+        });
+    }
 }
 
 module.exports = {ProductDao};

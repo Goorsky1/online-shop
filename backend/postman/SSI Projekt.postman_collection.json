@@ -101,6 +101,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "modifyUser",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"user_email\": \"user11@user.pl\",\r\n    \"user_password\": \"user1\",\r\n    \"user_status\": \"active\",\r\n    \"user_phone\": \"888888888\",\r\n    \"user_permissions\": \"client\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -114,7 +143,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"product_name\": \"Walko z Bogdanca\",\r\n    \"product_color\": \"Modry\",\r\n    \"product_material\": \"Buk\",\r\n    \"product_diameter\": \"420\",\r\n    \"product_width\": \"35\",\r\n    \"pattern_id\": \"1\",\r\n    \"product_count\": \"50\",\r\n    \"product_price\": \"99\",\r\n    \"product_description\": \"Niezle leje Krzyzakow pod Grunwaldem\",\r\n    \"product_image\": null\r\n}",
+							"raw": "{\r\n    \"pattern_name\": \"Kotki\",\r\n    \"pattern_theme\": \"Koteczki\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -122,7 +151,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/products",
+							"raw": "http://localhost:3000/api/patterns",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -130,7 +159,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"products"
+								"patterns"
 							]
 						}
 					},
@@ -184,7 +213,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/patterns/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -192,8 +221,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
-								"1"
+								"patterns",
+								"6"
 							]
 						}
 					},
@@ -260,7 +289,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/users/1",
+							"raw": "http://localhost:3000/api/products/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -268,8 +297,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"users",
-								"1"
+								"products",
+								"2"
 							]
 						}
 					},
@@ -291,6 +320,66 @@
 								"api",
 								"users",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modifyProducts",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product_name\": \"Ameba\",\r\n    \"product_color\": \"Mebowata\",\r\n    \"product_material\": \"Nibynozka\",\r\n    \"product_diameter\": \"99\",\r\n    \"product_width\": \"99\",\r\n    \"pattern_id\": \"1\",\r\n    \"product_count\": \"11\",\r\n    \"product_price\": \"21\",\r\n    \"product_description\": \"Jak cie kopne niby nk\",\r\n    \"product_image\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modifyPattern",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pattern_name\": \"Kotki\",\r\n    \"pattern_theme\": \"Kotunie\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/patterns/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"patterns",
+								"6"
 							]
 						}
 					},
