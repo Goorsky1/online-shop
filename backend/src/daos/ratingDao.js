@@ -16,37 +16,61 @@ class RatingDao {
         });
     }
 
-    addRating(id, rating, callback) {
-        const query = 'INSERT INTO ratings (id, user_id, rating_value) VALUES (?, ?, ?)';
-        const values = [rating.product_id, rating.user_id, rating.rating_value];
-        this.db.run(query,[id], values, function (err) {
+    addRating(productId, rating, callback) {
+        const userId = rating._user_id;
+        const ratingValue = rating._rating_value;
+        console.log('Using values:', productId, userId, ratingValue);
+        const query = 'INSERT INTO ratings (product_id, user_id, rating_value) VALUES (?, ?, ?)';
+        const values = [productId, userId, ratingValue];
+
+        this.db.run(query, values, function(err) {
             if (err) {
                 return callback(err);
             }
-            const productId = rating.product_id;
             callback(null, productId);
         });
     }
 
-    // getPatternById(id, callback) {
-    //     const query = 'SELECT pattern_id, pattern_name, pattern_theme FROM patterns WHERE pattern_id = ?';
-    //     this.db.get(query, [id], function(err, row) {
-    //         if (err) {
-    //             return callback(err);
-    //         }
-    //         callback(null, row);
-    //     })
-    // }
-    //
-    // deletePatternById(id, callback) {
-    //     const query = `DELETE FROM patterns WHERE pattern_id = ?`;
-    //     this.db.run(query, [id], function(err, row) {
-    //         if (err) {
-    //             return callback(err);
-    //         }
-    //     })
-    //     callback(null, "deleted");
-    // }
+    getRatingByUserIdAndProductId(userId, productId, callback) {
+        const query = "SELECT * FROM ratings WHERE user_id = ? AND product_id = ?";
+
+        this.db.get(query, [userId, productId], (err, row) => {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, row);
+            }
+        });
+    }
+
+    deleteRating(userId, productId, callback) {
+        const query = "DELETE FROM ratings WHERE user_id = ? AND product_id = ?";
+
+        this.db.run(query, [userId, productId],function(err, row) {
+            if (err) {
+                return callback(err);
+            }
+            console.log("row:", row);
+            callback(null, "deleted");
+        })
+    }
+
+    modifyRating(productId, rating, callback) {
+        const userId = rating._user_id;
+        const ratingValue = rating._rating_value;
+
+        console.log('Using values:', productId, userId, ratingValue);
+
+        const query = "UPDATE ratings SET rating_value = ? WHERE user_id = ? AND product_id = ?";
+        const values = [ratingValue, userId, productId];  // Adjusted the order here
+
+        this.db.run(query, values, function(err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, productId);
+        });
+    }
 }
 
 module.exports = {RatingDao};
