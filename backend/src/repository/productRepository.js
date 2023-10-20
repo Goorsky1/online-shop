@@ -1,6 +1,6 @@
-const {Product} = require("../models/Product");
+const { Product } = require("../models/Product");
 
-class ProductDao {
+class ProductRepository {
     constructor(db) {
         this.db = db;
     }
@@ -18,7 +18,7 @@ class ProductDao {
 
     getProductById(id, callback) {
         const query = 'SELECT * FROM products WHERE product_id = ?';
-        this.db.get(query, [id], function(err, row) {
+        this.db.get(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
@@ -42,11 +42,10 @@ class ProductDao {
 
     deleteProductById(id, callback) {
         const query = `DELETE FROM products WHERE product_id = ?`;
-        this.db.run(query, [id], function(err, row) {
+        this.db.run(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
-            console.log("row:", row);
             callback(null, "deleted");
         })
     }
@@ -81,7 +80,7 @@ class ProductDao {
             productId
         ];
 
-        this.db.run(query, values, function(err) {
+        this.db.run(query, values, function (err) {
             if (err) {
                 return callback(err);
             }
@@ -90,5 +89,5 @@ class ProductDao {
     }
 }
 
-module.exports = {ProductDao};
+module.exports = { ProductRepository };
 

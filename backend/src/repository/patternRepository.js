@@ -1,6 +1,6 @@
-const {Pattern} = require("../models/Pattern");
+const { Pattern } = require("../models/Pattern");
 
-class PatternDao {
+class PatternRepository {
     constructor(db) {
         this.db = db;
     }
@@ -30,7 +30,7 @@ class PatternDao {
 
     getPatternById(id, callback) {
         const query = 'SELECT pattern_id, pattern_name, pattern_theme FROM patterns WHERE pattern_id = ?';
-        this.db.get(query, [id], function(err, row) {
+        this.db.get(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
@@ -40,7 +40,7 @@ class PatternDao {
 
     deletePatternById(id, callback) {
         const query = `DELETE FROM patterns WHERE pattern_id = ?`;
-        this.db.run(query, [id], function(err, row) {
+        this.db.run(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
@@ -63,7 +63,7 @@ class PatternDao {
             patternId
         ];
 
-        this.db.run(query, values, function(err) {
+        this.db.run(query, values, function (err) {
             if (err) {
                 return callback(err);
             }
@@ -72,5 +72,5 @@ class PatternDao {
     }
 }
 
-module.exports = {PatternDao};
+module.exports = { PatternRepository };
 

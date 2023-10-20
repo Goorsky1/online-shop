@@ -30,4 +30,4 @@ class Pattern {
     }
 }
 
-module.exports = {Pattern};
+module.exports = { Pattern };

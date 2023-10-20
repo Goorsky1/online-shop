@@ -1,6 +1,6 @@
 const { User } = require("../models/User");
 
-class UserDao {
+class UserRepository {
     constructor(db) {
         this.db = db;
     }
@@ -23,32 +23,41 @@ class UserDao {
             if (err) {
                 return callback(err);
             }
-            const newUserId = this.lastID;
-            callback(null, newUserId);
+            callback(null, new User(this.lastID, user.user_email, user.user_password, user.user_status, user.user_phone, user.user_permissions));
         });
     }
 
     getUserById(id, callback) {
         const query = 'SELECT user_id, user_email, user_status, user_phone, user_permissions FROM users WHERE user_id = ?';
-        console.log("query:", query)
-        console.log("id:", id)
         this.db.get(query, [id], function (err, row) {
             if (err) {
                 return callback(err);
             }
-            // console.log("row:", row);
-            callback(null, row);
+            callback(null, new User(row.user_id, row.user_email, row.user_password, row.user_status, row.user_phone, row.user_permissions));
         })
     }
 
-    deleteUserById(id, callback) {
-        const query = `DELETE FROM users WHERE user_id = ?`;
-        this.db.run(query, [id], function (err, row) {
+    getUserByEmail(email, callback) {
+        const query = 'SELECT user_id, user_email, user_status, user_phone, user_permissions FROM users WHERE user_email = ?';
+        this.db.get(query, [email], function (err, row) {
             if (err) {
                 return callback(err);
             }
-            console.log("row:", row);
-            callback(null, "deleted");
+            if (!row) {
+                return callback(null, null)
+            }
+            callback(null, new User(row.user_id, row.user_email, row.user_password, row.user_status, row.user_phone, row.user_permissions));
+        })
+    }
+
+
+    deleteUserById(id, callback) {
+        const query = `DELETE FROM users WHERE user_id = ?`;
+        this.db.run(query, [id], function (err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null);
         })
     }
     modifyUser(id, user, callback) {
@@ -58,11 +67,11 @@ class UserDao {
             if (err) {
                 return callback(err);
             }
-            callback(null, user.user_id);  // Return the ID of the modified user
+            callback(null, new User(id, user.user_email, user.user_password, user.user_status, user.user_phone, user.user_permissions));
         });
     }
 
 }
 
-module.exports = { UserDao };
+module.exports = { UserRepository };
 

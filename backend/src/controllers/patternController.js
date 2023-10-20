@@ -1,15 +1,15 @@
 class PatternController {
-    constructor(dao) {
-        this.dao = dao;
+    constructor(repository) {
+        this.repository = repository;
     }
 
     getAllPatterns(req, res) {
-        this.dao.getAllPatterns((err, data) => {
+        this.repository.getAllPatterns((err, data) => {
             if (err) {
-                console.error(err);
+
                 res.status(500).send('Error retrieving data');
             } else {
-                console.log(data);
+
                 res.json(data);
             }
         });
@@ -17,33 +17,32 @@ class PatternController {
 
     addPattern(req, res) {
         const patternData = req.body;
-        this.dao.addPattern(patternData, (err, newPatternId) => {
+        this.repository.addPattern(patternData, (err, newPatternId) => {
             if (err) {
-                console.error(err);
+
                 res.status(500).send('Error adding a new pattern');
             } else {
-                res.status(201).json({id: newPatternId});
+                res.status(201).json({ id: newPatternId });
             }
         });
     }
 
     getPatternById(req, res) {
         const id = req.params.id
-        this.dao.getPatternById(id, (err, pattern) => {
+        this.repository.getPatternById(id, (err, pattern) => {
             if (err) {
-                console.error(err);
+
                 res.status(500).send('Error getting pattern by id');
             } else {
-                res.status(200).json({pattern: pattern});
+                res.status(200).json({ pattern: pattern });
             }
         });
     }
 
     deletePatternById(req, res) {
         const id = req.params.id
-        this.dao.deletePatternById(id, (err) => {
+        this.repository.deletePatternById(id, (err) => {
             if (err) {
-                console.error(err);
                 res.status(500).send('Error deleting pattern by id');
             } else {
                 res.status(204).json({});
@@ -55,9 +54,8 @@ class PatternController {
         const id = req.params.id;
         const updatedPatternData = req.body;
 
-        this.dao.modifyPattern(id, updatedPatternData, (err, message) => {
+        this.repository.modifyPattern(id, updatedPatternData, (err, message) => {
             if (err) {
-                console.error(err);
                 res.status(500).send('Error updating pattern');
             } else {
                 res.status(200).json({ message: message });
@@ -66,4 +64,4 @@ class PatternController {
     }
 }
 
-module.exports = {PatternController};
+module.exports = { PatternController };

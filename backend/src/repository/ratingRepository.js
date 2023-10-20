@@ -1,6 +1,6 @@
-const {Rating} = require("../models/Rating");
+const { Rating } = require("../models/Rating");
 
-class RatingDao {
+class RatingRepository {
     constructor(db) {
         this.db = db;
     }
@@ -17,17 +17,16 @@ class RatingDao {
     }
 
     addRating(productId, rating, callback) {
-        const userId = rating._user_id;
-        const ratingValue = rating._rating_value;
-        console.log('Using values:', productId, userId, ratingValue);
+        const userId = rating.user_id;
+        const ratingValue = rating.rating_value;
         const query = 'INSERT INTO ratings (product_id, user_id, rating_value) VALUES (?, ?, ?)';
         const values = [productId, userId, ratingValue];
 
-        this.db.run(query, values, function(err) {
+        this.db.run(query, values, function (err) {
             if (err) {
                 return callback(err);
             }
-            callback(null, productId);
+            callback(null, new Rating(productId, rating.userId, ratingValue));
         });
     }
 
@@ -38,7 +37,7 @@ class RatingDao {
             if (err) {
                 callback(err, null);
             } else {
-                callback(null, row);
+                callback(null, new Rating(row.product_id, row.user_id, row.rating_value));
             }
         });
     }
@@ -46,32 +45,28 @@ class RatingDao {
     deleteRating(userId, productId, callback) {
         const query = "DELETE FROM ratings WHERE user_id = ? AND product_id = ?";
 
-        this.db.run(query, [userId, productId],function(err, row) {
+        this.db.run(query, [userId, productId], function (err, row) {
             if (err) {
                 return callback(err);
             }
-            console.log("row:", row);
-            callback(null, "deleted");
+            callback(null);
         })
     }
 
     modifyRating(productId, rating, callback) {
-        const userId = rating._user_id;
-        const ratingValue = rating._rating_value;
-
-        console.log('Using values:', productId, userId, ratingValue);
-
+        const userId = rating.user_id;
+        const ratingValue = rating.rating_value;
         const query = "UPDATE ratings SET rating_value = ? WHERE user_id = ? AND product_id = ?";
-        const values = [ratingValue, userId, productId];  // Adjusted the order here
+        const values = [ratingValue, userId, productId];
 
-        this.db.run(query, values, function(err) {
+        this.db.run(query, values, function (err) {
             if (err) {
                 return callback(err);
             }
-            callback(null, productId);
+            callback(null, new Rating(productId, userId, ratingValue));
         });
     }
 }
 
-module.exports = {RatingDao};
+module.exports = { RatingRepository };
 
