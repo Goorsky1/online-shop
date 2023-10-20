@@ -1,64 +1,95 @@
-const { formatResponse } = require("../models/Response")
-const { formatError } = require("../models/Error")
+const { formatResponse } = require("../models/Response");
+const { formatError } = require("../models/Error");
+
 class UserController {
     constructor(repository) {
         this.repository = repository;
     }
 
-    getAllUsers(req, res) {
-        this.repository.getAllUsers((err, data) => {
-            if (err) {
-                res.status(500).json(formatError(`Error retrieving data, ${err}`));
-            } else {
-                res.json(formatResponse(data));
-            }
-        });
+    async getAllUsers(req, res) {
+        try {
+            const users = await this.repository.getAllUsers();
+            return res.json(formatResponse({ users }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error retrieving data, ${err}`));
+        }
     }
 
-    addUser(req, res) {
+    async addUser(req, res) {
         const userData = req.body;
-
-        this.repository.addUser(userData, (err, newUser) => {
-            if (err) {
-                res.status(500).json(formatError(`Error adding new user, ${err}`, 500));
-            } else {
-                res.status(201).json(formatResponse(newUser));
+        try {
+            const existingUser = await this.repository.getUserByEmail(userData.user_email)
+            if (existingUser) {
+                return res.status(409).json(formatError(`User with email ${userData.user_email} already exists`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding new user, ${err}`));
+        }
+
+        try {
+            const newUser = await this.repository.addUser(userData);
+            return res.status(201).json(formatResponse({ "user": newUser }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding new user, ${err}`));
+        }
     }
 
-    getUserById(req, res) {
-        const id = req.params.id
-        this.repository.getUserById(id, (err, user) => {
-            if (err) {
-                res.status(500).json(formatError(`Error getting user by id, ${err}`));
+    async getUserById(req, res) {
+        const id = req.params.id;
+        try {
+            const user = await this.repository.getUserById(id);
+            if (user) {
+                return res.status(200).json(formatResponse({ user }));
             } else {
-                res.status(200).json(formatResponse(user));
+                return res.status(404).json(formatError(`User with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting user by id, ${err}`));
+        }
     }
 
-    deleteUserById(req, res) {
-        const id = req.params.id
-        this.repository.deleteUserById(id, (err) => {
-            if (err) {
-                res.status(500).json(formatError(`Error deleting user by id, ${err}`));
-            } else {
-                res.sendStatus(204);
+    async deleteUserById(req, res) {
+        const id = req.params.id;
+        try {
+            const user = await this.repository.getUserById(id);
+            if (!user) {
+                return res.status(404).json(formatError(`User with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting user by id, ${err}`));
+        }
+
+        try {
+            await this.repository.deleteUserById(id);
+            return res.sendStatus(204);
+        } catch (err) {
+            return res.status(500).json(formatError(`Error deleting user by id, ${err}`));
+        }
     }
 
-    modifyUser(req, res) {
+    async modifyUser(req, res) {
         const userData = req.body;
-        const id = req.params.id
-        this.repository.modifyUser(id, userData, (err, modifiedUserId) => {
-            if (err) {
-                res.status(500).json(`Error modyfing the user, ${err}`);
-            } else {
-                res.status(200).json({ message: 'User modified successfully', id: modifiedUserId });
+        const id = req.params.id;
+
+        try {
+            const user = await this.repository.getUserById(id);
+            if (!user) {
+                return res.status(404).json(formatError(`User with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting user by id, ${err}`));
+        }
+
+        try {
+            const user = await this.repository.modifyUser(id, userData);
+            if (user) {
+                return res.status(200).json(formatResponse({ user }));
+            } else {
+                return res.status(404).json(formatError(`User with id ${id} not found`));
+            }
+        } catch (err) {
+            return res.status(500).json(formatError(`Error modifying the user, ${err}`));
+        }
     }
 }
 

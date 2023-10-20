@@ -1,67 +1,125 @@
+const { formatResponse } = require("../models/Response");
+const { formatError } = require("../models/Error");
+
 class RatingController {
-    constructor(repository) {
-        this.repository = repository;
+    constructor(ratingRepository, userRepository, productRepository) {
+        this.ratingRepository = ratingRepository;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
-    getAllRatingsByProductId(req, res) {
-        const id = req.params.id
-        this.repository.getAllRatingsByProductId(id, (err, data) => {
-            if (err) {
-                res.status(500).send('Error retrieving data');
-            } else {
-                res.json(data);
-            }
-        });
+    async getAllRatingsByProductId(req, res) {
+        const id = req.params.id;
+
+        try {
+            const ratings = await this.ratingRepository.getAllRatingsByProductId(id);
+            res.json(formatResponse({ ratings }));
+        } catch (err) {
+            res.status(500).json(formatError("Error retrieving data"));
+        }
     }
 
-    addRating(req, res) {
+    async addRating(req, res) {
         const productId = req.params.id;
         const ratingData = req.body;
-        this.repository.addRating(productId, ratingData, (err, returnedProductId) => {
-            if (err) {
-                res.status(500).send('Error adding a new rating');
-            } else {
-                res.status(201).json({ id: returnedProductId });
+
+        try {
+            const user = await this.userRepository.getUserById(ratingData.user_id);
+            if (!user) {
+                return res.status(404).json(formatError(`Error adding a new rating, user ${ratingData.user_id} does not exist`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding a new rating, ${err}`));
+        }
+
+        try {
+            const product = await this.productRepository.getProductById(productId);
+            if (!product) {
+                return res.status(404).json(formatError(`Error adding a new rating, product ${productId} does not exist`));
+            }
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding a new rating, ${err}`));
+        }
+
+        try {
+            const existingRating = await this.ratingRepository.getRatingByUserIdAndProductId(ratingData.user_id, productId);
+            if (existingRating) {
+                res.status(409).json(formatError("Rating already exists for this user and product"));
+            } else {
+                const rating = await this.ratingRepository.addRating(productId, ratingData);
+                res.status(201).json(formatResponse({ rating }));
+            }
+        } catch (err) {
+            res.status(500).json(formatError("Error adding a new rating"));
+        }
     }
 
-    getRatingByUserIdAndProductId(req, res) {
+    async getRatingByUserIdAndProductId(req, res) {
         const userId = req.params.idu;
         const productId = req.params.idp;
 
-        this.repository.getRatingByUserIdAndProductId(userId, productId, (err, rating) => {
-            if (err) {
-                res.status(500).json({ error: "Error fetching rating" });
+        try {
+            const rating = await this.ratingRepository.getRatingByUserIdAndProductId(userId, productId);
+            if (rating) {
+                res.json(formatResponse({ rating }));
             } else {
-                res.json(rating);
+                res.status(404).json(formatError("Rating not found"));
             }
-        });
+        } catch (err) {
+            res.status(500).json(formatError("Error fetching rating"));
+        }
     }
 
-    deleteRating(req, res) {
+    async deleteRating(req, res) {
         const userId = req.params.idu;
         const productId = req.params.idp;
 
-        this.repository.deleteRating(userId, productId, (err) => {
-            if (err) {
-                res.status(500).json({ error: "Error deleting rating" });
+        try {
+            const rating = await this.ratingRepository.getRatingByUserIdAndProductId(userId, productId);
+            if (!rating) {
+                res.status(404).json(formatError("Rating not found"));
             } else {
-                res.json({ message: "Rating successfully deleted" });
+                await this.ratingRepository.deleteRating(userId, productId);
+                res.sendStatus(204);
             }
-        });
+        } catch (err) {
+            res.status(500).json(formatError("Error deleting rating"));
+        }
     }
 
-    modifyRating(req, res) {
+    async modifyRating(req, res) {
         const productId = req.params.id;
         const ratingData = req.body;
-        this.repository.modifyRating(productId, ratingData, (err) => {
-            if (err) {
-                res.status(500).json({ error: "Error modifying rating" });
-            } else {
-                res.json({ message: "Rating successfully modified" });
+
+        try {
+            const user = await this.userRepository.getUserById(ratingData.user_id);
+            if (!user) {
+                return res.status(404).json(formatError(`Error modifying rating, user ${ratingData.user_id} does not exist`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error modifying rating, ${err}`));
+        }
+
+        try {
+            const product = await this.productRepository.getProductById(productId);
+            if (!product) {
+                return res.status(404).json(formatError(`Error modifying rating, product ${productId} does not exist`));
+            }
+        } catch (err) {
+            return res.status(500).json(formatError(`Error modifying rating, ${err}`));
+        }
+
+        try {
+            const rating = await this.ratingRepository.getRatingByUserIdAndProductId(ratingData.user_id, productId);
+            if (!rating) {
+                res.status(404).json(formatError("Rating not found"));
+            } else {
+                const rating = await this.ratingRepository.modifyRating(productId, ratingData);
+                res.status(200).json(formatResponse({ rating }));
+            }
+        } catch (err) {
+            res.status(500).json(formatError("Error modifying rating"));
+        }
     }
 }
 
