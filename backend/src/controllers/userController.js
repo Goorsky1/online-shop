@@ -1,54 +1,50 @@
+const { formatResponse } = require("../models/Response")
+const { formatError } = require("../models/Error")
 class UserController {
-    constructor(dao) {
-        this.dao = dao;
+    constructor(repository) {
+        this.repository = repository;
     }
 
     getAllUsers(req, res) {
-        this.dao.getAllUsers((err, data) => {
+        this.repository.getAllUsers((err, data) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error retrieving data');
+                res.status(500).json(formatError(`Error retrieving data, ${err}`));
             } else {
-                console.log(data);
-                res.json(data);
+                res.json(formatResponse(data));
             }
         });
     }
 
     addUser(req, res) {
         const userData = req.body;
-        this.dao.addUser(userData, (err, newUserId) => {
+
+        this.repository.addUser(userData, (err, newUser) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error adding a new user');
+                res.status(500).json(formatError(`Error adding new user, ${err}`, 500));
             } else {
-                res.status(201).json({ id: newUserId });
+                res.status(201).json(formatResponse(newUser));
             }
         });
     }
 
     getUserById(req, res) {
         const id = req.params.id
-        console.log("id:", id)
-        this.dao.getUserById(id, (err, user) => {
+        this.repository.getUserById(id, (err, user) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error getting user by id');
+                res.status(500).json(formatError(`Error getting user by id, ${err}`));
             } else {
-                res.status(200).json({ user: user });
+                res.status(200).json(formatResponse(user));
             }
         });
     }
 
     deleteUserById(req, res) {
         const id = req.params.id
-        console.log("id:", id)
-        this.dao.deleteUserById(id, (err) => {
+        this.repository.deleteUserById(id, (err) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error deleting user by id');
+                res.status(500).json(formatError(`Error deleting user by id, ${err}`));
             } else {
-                res.status(204).json({});
+                res.sendStatus(204);
             }
         });
     }
@@ -56,10 +52,9 @@ class UserController {
     modifyUser(req, res) {
         const userData = req.body;
         const id = req.params.id
-        this.dao.modifyUser(id, userData, (err, modifiedUserId) => {
+        this.repository.modifyUser(id, userData, (err, modifiedUserId) => {
             if (err) {
-                console.error(err);
-                res.status(500).send('Error modifying the user');
+                res.status(500).json(`Error modyfing the user, ${err}`);
             } else {
                 res.status(200).json({ message: 'User modified successfully', id: modifiedUserId });
             }

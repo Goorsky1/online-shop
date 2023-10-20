@@ -4,23 +4,23 @@ const { ProductController } = require('../controllers/productController');
 const { PatternController } = require('../controllers/patternController');
 const { RatingController } = require('../controllers/ratingController');
 
-const { UserDao } = require("../daos/userDao");
-const { ProductDao } = require("../daos/productDao");
-const { PatternDao } = require("../daos/patternDao");
-const { RatingDao } = require("../daos/ratingDao");
+const { UserRepository } = require("../repository/userRepository");
+const { ProductRepository } = require("../repository/productRepository");
+const { PatternRepository } = require("../repository/patternRepository");
+const { RatingRepository } = require("../repository/ratingRepository");
 const db = require("../config")
 
-const userDao = new UserDao(db);
-const productDao = new ProductDao(db);
-const patternDao = new PatternDao(db);
-const ratingDao = new RatingDao(db);
+const userRepository = new UserRepository(db);
+const productRepository = new ProductRepository(db);
+const patternRepository = new PatternRepository(db);
+const ratingRepository = new RatingRepository(db);
 
 const router = express.Router();
 
-const userController = new UserController(userDao);
-const productController = new ProductController(productDao);
-const patternController = new PatternController(patternDao);
-const ratingController = new RatingController(ratingDao);
+const userController = new UserController(userRepository);
+const productController = new ProductController(productRepository);
+const patternController = new PatternController(patternRepository);
+const ratingController = new RatingController(ratingRepository);
 
 router.get('/users', userController.getAllUsers.bind(userController));
 router.post('/users', userController.addUser.bind(userController));

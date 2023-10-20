@@ -30,4 +30,4 @@ class Rating {
     }
 }
 
-module.exports = {Rating};
+module.exports = { Rating };

@@ -1,16 +1,14 @@
 class RatingController {
-    constructor(dao) {
-        this.dao = dao;
+    constructor(repository) {
+        this.repository = repository;
     }
 
     getAllRatingsByProductId(req, res) {
         const id = req.params.id
-        this.dao.getAllRatingsByProductId(id, (err, data) => {
+        this.repository.getAllRatingsByProductId(id, (err, data) => {
             if (err) {
-                console.error(err);
                 res.status(500).send('Error retrieving data');
             } else {
-                console.log(data);
                 res.json(data);
             }
         });
@@ -19,12 +17,8 @@ class RatingController {
     addRating(req, res) {
         const productId = req.params.id;
         const ratingData = req.body;
-
-        console.log('Received ratingData:', ratingData); // Debug log
-
-        this.dao.addRating(productId, ratingData, (err, returnedProductId) => {
+        this.repository.addRating(productId, ratingData, (err, returnedProductId) => {
             if (err) {
-                console.error(err);
                 res.status(500).send('Error adding a new rating');
             } else {
                 res.status(201).json({ id: returnedProductId });
@@ -36,7 +30,7 @@ class RatingController {
         const userId = req.params.idu;
         const productId = req.params.idp;
 
-        this.dao.getRatingByUserIdAndProductId(userId, productId, (err, rating) => {
+        this.repository.getRatingByUserIdAndProductId(userId, productId, (err, rating) => {
             if (err) {
                 res.status(500).json({ error: "Error fetching rating" });
             } else {
@@ -49,7 +43,7 @@ class RatingController {
         const userId = req.params.idu;
         const productId = req.params.idp;
 
-        this.dao.deleteRating(userId, productId, (err) => {
+        this.repository.deleteRating(userId, productId, (err) => {
             if (err) {
                 res.status(500).json({ error: "Error deleting rating" });
             } else {
@@ -61,8 +55,7 @@ class RatingController {
     modifyRating(req, res) {
         const productId = req.params.id;
         const ratingData = req.body;
-        console.log('Received ratingData:', ratingData); // Debug log
-        this.dao.modifyRating( productId, ratingData, (err) => {
+        this.repository.modifyRating(productId, ratingData, (err) => {
             if (err) {
                 res.status(500).json({ error: "Error modifying rating" });
             } else {
@@ -72,4 +65,4 @@ class RatingController {
     }
 }
 
-module.exports = {RatingController};
+module.exports = { RatingController };
