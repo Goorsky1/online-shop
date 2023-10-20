@@ -5,50 +5,64 @@ class PatternRepository {
         this.db = db;
     }
 
-    getAllPatterns(callback) {
-        const query = 'SELECT * FROM patterns';
-        this.db.all(query, (err, rows) => {
-            if (err) {
-                return callback(err);
-            }
-            const patterns = rows.map(row => new Pattern(row.pattern_id, row.pattern_name, row.pattern_theme));
-            callback(null, patterns);
+    async getAllPatterns() {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT * FROM patterns';
+            this.db.all(query, (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    const patterns = rows.map(row => new Pattern(row.pattern_id, row.pattern_name, row.pattern_theme));
+                    resolve(patterns);
+                }
+            });
         });
     }
 
-    addPattern(pattern, callback) {
+    async addPattern(pattern) {
         const query = 'INSERT INTO patterns (pattern_name, pattern_theme) VALUES (?, ?)';
         const values = [pattern.pattern_name, pattern.pattern_theme];
-        this.db.run(query, values, function (err) {
-            if (err) {
-                return callback(err);
-            }
-            const newPatternId = this.lastID;
-            callback(null, newPatternId);
+
+        return new Promise((resolve, reject) => {
+            this.db.run(query, values, function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(new Pattern(this.lastId, pattern.pattern_name, pattern.pattern_theme));
+                }
+            });
         });
     }
 
-    getPatternById(id, callback) {
-        const query = 'SELECT pattern_id, pattern_name, pattern_theme FROM patterns WHERE pattern_id = ?';
-        this.db.get(query, [id], function (err, row) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, row);
-        })
+    async getPatternById(id) {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT pattern_id, pattern_name, pattern_theme FROM patterns WHERE pattern_id = ?';
+            this.db.get(query, [id], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else if (row) {
+                    resolve(new Pattern(row.pattern_id, row.pattern_name, row.pattern_theme));
+                } else {
+                    resolve()
+                }
+            });
+        });
     }
 
-    deletePatternById(id, callback) {
-        const query = `DELETE FROM patterns WHERE pattern_id = ?`;
-        this.db.run(query, [id], function (err, row) {
-            if (err) {
-                return callback(err);
-            }
-        })
-        callback(null, "deleted");
+    async deletePatternById(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM patterns WHERE pattern_id = ?`;
+            this.db.run(query, [id], function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
     }
 
-    modifyPattern(patternId, updatedPattern, callback) {
+    async modifyPattern(patternId, updatedPattern) {
         const query = `
         UPDATE patterns 
         SET 
@@ -63,14 +77,16 @@ class PatternRepository {
             patternId
         ];
 
-        this.db.run(query, values, function (err) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, "Pattern Updated");
+        return new Promise((resolve, reject) => {
+            this.db.run(query, values, function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(new Pattern(patternId, updatedPattern.pattern_name, updatedPattern.pattern_theme));
+                }
+            });
         });
     }
 }
 
 module.exports = { PatternRepository };
-

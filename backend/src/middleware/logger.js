@@ -21,13 +21,14 @@ function logger(req, res, next) {
         catch (e) {
             respBody = body
         }
+
         console.log({
             method: req.method,
             uri: req.url,
             requestData: req.body,
             responseData: respBody,
             responseStatus: res.statusCode
-        });
+        }, '\n');
         oldEnd.apply(res, restArgs);
     };
 

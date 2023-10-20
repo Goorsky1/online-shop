@@ -1,66 +1,82 @@
+const { formatResponse } = require("../models/Response");
+const { formatError } = require("../models/Error");
+
 class PatternController {
     constructor(repository) {
         this.repository = repository;
     }
 
-    getAllPatterns(req, res) {
-        this.repository.getAllPatterns((err, data) => {
-            if (err) {
-
-                res.status(500).send('Error retrieving data');
-            } else {
-
-                res.json(data);
-            }
-        });
+    async getAllPatterns(req, res) {
+        try {
+            const patterns = await this.repository.getAllPatterns();
+            res.json(formatResponse({ patterns }));
+        } catch (err) {
+            res.status(500).json(formatError(`Error retrieving data, ${err}`));
+        }
     }
 
-    addPattern(req, res) {
+    async addPattern(req, res) {
         const patternData = req.body;
-        this.repository.addPattern(patternData, (err, newPatternId) => {
-            if (err) {
-
-                res.status(500).send('Error adding a new pattern');
-            } else {
-                res.status(201).json({ id: newPatternId });
-            }
-        });
+        try {
+            const newPattern = await this.repository.addPattern(patternData);
+            res.status(201).json(formatResponse({ "pattern": newPattern }));
+        } catch (err) {
+            res.status(500).json(formatError(`Error adding a new pattern, ${err}`));
+        }
     }
 
-    getPatternById(req, res) {
-        const id = req.params.id
-        this.repository.getPatternById(id, (err, pattern) => {
-            if (err) {
-
-                res.status(500).send('Error getting pattern by id');
+    async getPatternById(req, res) {
+        const id = req.params.id;
+        try {
+            const pattern = await this.repository.getPatternById(id);
+            if (pattern) {
+                res.status(200).json(formatResponse({ pattern }));
             } else {
-                res.status(200).json({ pattern: pattern });
+                res.status(404).json(formatError(`Pattern with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            res.status(500).json(formatError(`Error getting pattern by id, ${err}`));
+        }
     }
 
-    deletePatternById(req, res) {
-        const id = req.params.id
-        this.repository.deletePatternById(id, (err) => {
-            if (err) {
-                res.status(500).send('Error deleting pattern by id');
-            } else {
-                res.status(204).json({});
+    async deletePatternById(req, res) {
+        const id = req.params.id;
+        try {
+            const pattern = await this.repository.getPatternById(id);
+            if (!pattern) {
+                return res.status(404).json(formatError(`Pattern with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting pattern by id, ${err}`));
+        }
+
+        try {
+            await this.repository.deletePatternById(id);
+            return res.sendStatus(204);
+        } catch (err) {
+            return res.status(500).json(formatError(`Error deleting pattern by id, ${err}`));
+        }
     }
 
-    modifyPattern(req, res) {
+    async modifyPattern(req, res) {
         const id = req.params.id;
         const updatedPatternData = req.body;
 
-        this.repository.modifyPattern(id, updatedPatternData, (err, message) => {
-            if (err) {
-                res.status(500).send('Error updating pattern');
-            } else {
-                res.status(200).json({ message: message });
+        try {
+            const pattern = await this.repository.getPatternById(id);
+            if (!pattern) {
+                return res.status(404).json(formatError(`Pattern with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting pattern by id, ${err}`));
+        }
+
+        try {
+            const pattern = await this.repository.modifyPattern(id, updatedPatternData);
+            return res.status(200).json(formatResponse({ pattern }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error updating pattern, ${err}`));
+        }
     }
 }
 

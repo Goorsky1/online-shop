@@ -18,9 +18,9 @@ const ratingRepository = new RatingRepository(db);
 const router = express.Router();
 
 const userController = new UserController(userRepository);
-const productController = new ProductController(productRepository);
+const productController = new ProductController(productRepository, patternRepository);
 const patternController = new PatternController(patternRepository);
-const ratingController = new RatingController(ratingRepository);
+const ratingController = new RatingController(ratingRepository, userRepository, productRepository);
 
 router.get('/users', userController.getAllUsers.bind(userController));
 router.post('/users', userController.addUser.bind(userController));

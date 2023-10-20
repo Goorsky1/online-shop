@@ -1,67 +1,101 @@
+const { formatResponse } = require("../models/Response");
+const { formatError } = require("../models/Error");
+
 class ProductController {
-    constructor(repository) {
-        this.repository = repository;
+    constructor(productRepository, patternRepository) {
+        this.productRepository = productRepository;
+        this.patternRepository = patternRepository;
     }
 
-    getAllProducts(req, res) {
-        this.repository.getAllProducts((err, data) => {
-            if (err) {
-
-                res.status(500).send('Error retrieving data');
-            } else {
-
-                res.json(data);
-            }
-        });
+    async getAllProducts(req, res) {
+        try {
+            const products = await this.productRepository.getAllProducts();
+            res.json(formatResponse({ products }));
+        } catch (err) {
+            res.status(500).json(formatError(`Error retrieving data, ${err}`));
+        }
     }
 
-    addProduct(req, res) {
+    async addProduct(req, res) {
         const productData = req.body;
-        this.repository.addProduct(productData, (err, newProductId) => {
-            if (err) {
-
-                res.status(500).send('Error adding a new product');
-            } else {
-                res.status(201).json({ id: newProductId });
+        try {
+            const pattern = await this.patternRepository.getPatternById(productData.pattern_id);
+            if (!pattern) {
+                return res.status(404).json(formatError(`Error adding a new product, pattern ${productData.pattern_id} does not exist`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding a new product, ${err}`));
+        }
+
+        try {
+            const newProduct = await this.productRepository.addProduct(productData);
+            return res.status(201).json(formatResponse({ "product": newProduct }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error adding a new product, ${err}`));
+        }
     }
 
-    getProductById(req, res) {
-        const id = req.params.id
-        this.repository.getProductById(id, (err, product) => {
-            if (err) {
-
-                res.status(500).send('Error getting product by id');
+    async getProductById(req, res) {
+        const id = req.params.id;
+        try {
+            const product = await this.productRepository.getProductById(id);
+            if (product) {
+                res.status(200).json(formatResponse({ product }));
             } else {
-                res.status(200).json({ product: product });
+                res.status(404).json(formatError(`Product with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            res.status(500).json(formatError(`Error getting product by id, ${err}`));
+        }
     }
 
-    deleteProductById(req, res) {
-        const id = req.params.id
-
-        this.repository.deleteProductById(id, (err) => {
-            if (err) {
-
-                res.status(500).send('Error deleting product by id');
-            } else {
-                res.status(204).json({});
+    async deleteProductById(req, res) {
+        const id = req.params.id;
+        try {
+            const product = await this.productRepository.getProductById(id);
+            if (!product) {
+                return res.status(404).json(formatError(`Product with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting product by id, ${err}`));
+        }
+
+        try {
+            await this.productRepository.deleteProductById(id);
+            return res.sendStatus(204);
+        } catch (err) {
+            return res.status(500).json(formatError(`Error deleting product by id, ${err}`));
+        }
     }
 
-    modifyProduct(req, res) {
+    async modifyProduct(req, res) {
         const id = req.params.id;
         const updatedProductData = req.body;
-        this.repository.modifyProduct(id, updatedProductData, (err, message) => {
-            if (err) {
-                res.status(500).send('Error updating product');
-            } else {
-                res.status(200).json({ message: message });
+
+        try {
+            const product = await this.productRepository.getProductById(id);
+            if (!product) {
+                return res.status(404).json(formatError(`Product with id ${id} not found`));
             }
-        });
+        } catch (err) {
+            return res.status(500).json(formatError(`Error getting product by id, ${err}`));
+        }
+
+        try {
+            const pattern = await this.patternRepository.getPatternById(producupdatedProductDatatData.pattern_id);
+            if (!pattern) {
+                return res.status(404).json(formatError(`Error modifying a new product, pattern ${updatedProductData.pattern_id} does not exist`));
+            }
+        } catch (err) {
+            return res.status(500).json(formatError(`Error modifying a new product, ${err}`));
+        }
+
+        try {
+            const product = await this.productRepository.modifyProduct(id, updatedProductData);
+            return res.status(200).json(formatResponse({ product }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error updating product, ${err}`));
+        }
     }
 }
 
