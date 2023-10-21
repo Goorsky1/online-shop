@@ -28,6 +28,14 @@ class Rating {
     set rating_value(value) {
         this._rating_value = value;
     }
+
+    toJSON() {
+        return {
+            product_id: this._product_id,
+            user_id: this._user_id,
+            rating_value: this._rating_value,
+        };
+    }
 }
 
 module.exports = { Rating };

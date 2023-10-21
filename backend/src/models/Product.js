@@ -100,6 +100,22 @@ class Product {
     set product_image(value) {
         this._product_image = value;
     }
+
+    toJSON() {
+        return {
+            product_id: this._product_id,
+            product_name: this._product_name,
+            product_color: this._product_color,
+            product_material: this._product_material,
+            product_diameter: this._product_diameter,
+            product_width: this._product_width,
+            pattern_id: this._pattern_id,
+            product_count: this._product_count,
+            product_price: this._product_price,
+            product_description: this._product_description,
+            product_image: this._product_image,
+        };
+    }
 }
 
 module.exports = { Product };
