@@ -70,9 +70,9 @@ class UserController {
     async modifyUser(req, res) {
         const userData = req.body;
         const id = req.params.id;
-
+        let user
         try {
-            const user = await this.repository.getUserById(id);
+            user = await this.repository.getUserById(id);
             if (!user) {
                 return res.status(404).json(formatError(`User with id ${id} not found`));
             }
@@ -81,9 +81,10 @@ class UserController {
         }
 
         try {
-            const user = await this.repository.modifyUser(id, userData);
-            if (user) {
-                return res.status(200).json(formatResponse({ user }));
+            const parsedUser = JSON.parse(JSON.stringify(user)) //get rid of underscores from model
+            const modifiedUser = await this.repository.modifyUser(id, { ...parsedUser, ...userData, });
+            if (modifiedUser) {
+                return res.status(200).json(formatResponse({ user: modifiedUser }));
             } else {
                 return res.status(404).json(formatError(`User with id ${id} not found`));
             }

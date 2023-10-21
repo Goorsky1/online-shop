@@ -28,6 +28,14 @@ class Pattern {
     set pattern_theme(value) {
         this._pattern_theme = value;
     }
+
+    toJSON() {
+        return {
+            pattern_id: this._pattern_id,
+            pattern_name: this._pattern_name,
+            pattern_theme: this._pattern_theme,
+        };
+    }
 }
 
 module.exports = { Pattern };

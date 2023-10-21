@@ -42,7 +42,7 @@ class UserRepository {
 
     async getUserById(id) {
         return new Promise((resolve, reject) => {
-            const query = 'SELECT user_id, user_email, user_status, user_phone, user_permissions FROM users WHERE user_id = ?';
+            const query = 'SELECT user_id, user_email, user_password, user_status, user_phone, user_permissions FROM users WHERE user_id = ?';
             this.db.get(query, [id], (err, row) => {
                 if (err) {
                     reject(err);
