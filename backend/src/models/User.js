@@ -55,6 +55,17 @@ class User {
     set user_permissions(value) {
         this._user_permissions = value;
     }
+
+    toJSON() {
+        return {
+            user_id: this._user_id,
+            user_email: this._user_email,
+            user_password: this._user_password,
+            user_status: this._user_status,
+            user_phone: this._user_phone,
+            user_permissions: this._user_permissions,
+        };
+    }
 }
 
 module.exports = { User };

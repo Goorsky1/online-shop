@@ -15,6 +15,9 @@ const productRepository = new ProductRepository(db);
 const patternRepository = new PatternRepository(db);
 const ratingRepository = new RatingRepository(db);
 
+const { validator } = require("../middleware/validator")
+const { userSchemas } = require("../schemas/userSchema");
+
 const router = express.Router();
 
 const userController = new UserController(userRepository);
@@ -23,9 +26,9 @@ const patternController = new PatternController(patternRepository);
 const ratingController = new RatingController(ratingRepository, userRepository, productRepository);
 
 router.get('/users', userController.getAllUsers.bind(userController));
-router.post('/users', userController.addUser.bind(userController));
+router.post('/users', validator(userSchemas.addUser), userController.addUser.bind(userController));
 router.get('/users/:id', userController.getUserById.bind(userController));
-router.patch('/users/:id', userController.modifyUser.bind(userController));
+router.patch('/users/:id', validator(userSchemas.modifyUser), userController.modifyUser.bind(userController));
 router.delete('/users/:id', userController.deleteUserById.bind(userController));
 
 router.get('/products', productController.getAllProducts.bind(productController));
