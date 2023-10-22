@@ -70,29 +70,32 @@ class ProductController {
 
     async modifyProduct(req, res) {
         const id = req.params.id;
-        const updatedProductData = req.body;
-
+        let productData = req.body;
+        let product
         try {
-            const product = await this.productRepository.getProductById(id);
+            product = await this.productRepository.getProductById(id);
             if (!product) {
                 return res.status(404).json(formatError(`Product with id ${id} not found`));
+            } else {
+                const parsedProduct = JSON.parse(JSON.stringify(product)) //get rid of underscores from model
+                productData = { ...parsedProduct, ...productData }
             }
         } catch (err) {
             return res.status(500).json(formatError(`Error getting product by id, ${err}`));
         }
 
         try {
-            const pattern = await this.patternRepository.getPatternById(producupdatedProductDatatData.pattern_id);
+            const pattern = await this.patternRepository.getPatternById(productData.pattern_id);
             if (!pattern) {
-                return res.status(404).json(formatError(`Error modifying a new product, pattern ${updatedProductData.pattern_id} does not exist`));
+                return res.status(404).json(formatError(`Error modifying a new product, pattern ${productData.pattern_id} does not exist`));
             }
         } catch (err) {
             return res.status(500).json(formatError(`Error modifying a new product, ${err}`));
         }
 
         try {
-            const product = await this.productRepository.modifyProduct(id, updatedProductData);
-            return res.status(200).json(formatResponse({ product }));
+            const modifiedProduct = await this.productRepository.modifyProduct(id, productData);
+            return res.status(200).json(formatResponse({ product: modifiedProduct }));
         } catch (err) {
             return res.status(500).json(formatError(`Error updating product, ${err}`));
         }

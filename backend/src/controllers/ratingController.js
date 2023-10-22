@@ -89,7 +89,18 @@ class RatingController {
 
     async modifyRating(req, res) {
         const productId = req.params.id;
-        const ratingData = req.body;
+        let ratingData = req.body
+        try {
+            const rating = await this.ratingRepository.getRatingByUserIdAndProductId(ratingData.user_id, productId);
+            if (!rating) {
+                return res.status(404).json(formatError("Rating not found"));
+            } else {
+                const parsedRating = JSON.parse(JSON.stringify(rating)) //get rid of underscores from model
+                ratingData = { ...rating, ...req.body };
+            }
+        } catch (err) {
+            return res.status(500).json(formatError(`Error modifying rating, err: ${err}`));
+        }
 
         try {
             const user = await this.userRepository.getUserById(ratingData.user_id);
@@ -110,15 +121,10 @@ class RatingController {
         }
 
         try {
-            const rating = await this.ratingRepository.getRatingByUserIdAndProductId(ratingData.user_id, productId);
-            if (!rating) {
-                res.status(404).json(formatError("Rating not found"));
-            } else {
-                const rating = await this.ratingRepository.modifyRating(productId, ratingData);
-                res.status(200).json(formatResponse({ rating }));
-            }
+            const modifiedRating = await this.ratingRepository.modifyRating(productId, { ...ratingData });
+            return res.status(200).json(formatResponse({ rating: modifiedRating }));
         } catch (err) {
-            res.status(500).json(formatError("Error modifying rating"));
+            return res.status(500).json(formatError("Error modifying rating"));
         }
     }
 }
