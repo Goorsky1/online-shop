@@ -60,10 +60,10 @@ class PatternController {
 
     async modifyPattern(req, res) {
         const id = req.params.id;
-        const updatedPatternData = req.body;
-
+        const patternData = req.body;
+        let pattern
         try {
-            const pattern = await this.repository.getPatternById(id);
+            pattern = await this.repository.getPatternById(id);
             if (!pattern) {
                 return res.status(404).json(formatError(`Pattern with id ${id} not found`));
             }
@@ -72,8 +72,9 @@ class PatternController {
         }
 
         try {
-            const pattern = await this.repository.modifyPattern(id, updatedPatternData);
-            return res.status(200).json(formatResponse({ pattern }));
+            const parsedPattern = JSON.parse(JSON.stringify(pattern)) //get rid of underscores from model
+            const modifiedPattern = await this.repository.modifyPattern(id, { ...parsedPattern, ...patternData });
+            return res.status(200).json(formatResponse({ pattern: modifiedPattern }));
         } catch (err) {
             return res.status(500).json(formatError(`Error updating pattern, ${err}`));
         }

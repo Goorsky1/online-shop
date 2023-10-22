@@ -4,8 +4,7 @@ const { formatError } = require("../models/Error");
 const validator = (schema) => {
     return (req, res, next) => {
         const { error } = schema.validate(req.body);
-        const valid = error == null;
-        if (valid) { next(); }
+        if (!error) { next(); }
         else {
             const { details } = error;
             const message = details.map(i => i.message).join(',')
