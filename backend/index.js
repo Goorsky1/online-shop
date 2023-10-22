@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors')
 const logger = require('./src/middleware/logger.js');
 const app = express();
 
 const port = 3000;
 app.use(express.json())
+app.use(cors());
 app.use(logger)
 
 const routes = require('./src/routes/routes.js');
