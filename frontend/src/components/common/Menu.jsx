@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-
+import "./menuCss.css"
 export function Menu() {
 
     const menuItems = [
@@ -21,11 +21,13 @@ export function Menu() {
 
     return (
         <div className='menu'>
-            {menuItems.map(item =>
-                <div className='menu_item' key={item.name}>
-                    <Link to={item.path}>{item.name}</Link>
-                </div>,
-            )}
+            <ul>
+                {menuItems.map(item =>
+                    <li className='menu_item' key={item.name}>
+                        <Link to={item.path}>{item.name}</Link>
+                    </li>,
+                )}
+            </ul>
         </div>
     )
 }

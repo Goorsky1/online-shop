@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import apiClient from '../../utils/apiClient'
+import { CardList } from '../common/CardList';
 
 export function ProductList() {
     const [products, setProducts] = useState([])
@@ -12,12 +13,10 @@ export function ProductList() {
             });
     }, [])
 
-    return <div>
-        <h1>Example Component</h1>
-        <ul>
-            {products.map((product) => (
-                <li>{JSON.stringify(product)}</li>
-            ))}
-        </ul>
-    </div>;
+    return (
+        <div>
+            <h1>Example Component</h1>
+            <CardList products={products} />
+        </div>
+    )
 };

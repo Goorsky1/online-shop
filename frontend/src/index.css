@@ -11,3 +11,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --background-color: #ECF8F8;
+  --border-color: #212121;
+  --font-color: black;
+  --font-highlight-color: #654321;
+  --button-color: #E6BEAE;
+  --highlight-color: #EEE4E1;
+  --header-font: #4e371f;
+
+  color: var(--font-color);
+  background-color: var(--background-color);
+}
+
+.content {
+  margin-left: 15%;
+  margin-right: 15%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.title {
+  font-family: Yellowtail;
+  font-weight: 300;
+  font-size: 60px;
+  margin-bottom: 5px;
+  margin-top: 0;
+  color: var(--header-font)
+}
