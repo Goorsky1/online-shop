@@ -57,7 +57,7 @@ class UserRepository {
 
     async getUserByEmail(email) {
         return new Promise((resolve, reject) => {
-            const query = 'SELECT user_id, user_email, user_status, user_phone, user_permissions FROM users WHERE user_email = ?';
+            const query = 'SELECT user_id, user_email, user_password, user_status, user_phone, user_permissions FROM users WHERE user_email = ?';
             this.db.get(query, [email], (err, row) => {
                 if (err) {
                     reject(err);
