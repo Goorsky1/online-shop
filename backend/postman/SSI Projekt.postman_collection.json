@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "87c73bc6-fb4b-4e3f-9e4c-352e31dd144f",
+		"_postman_id": "bb39ab32-12b0-4274-96ef-30f0fe3580e2",
 		"name": "SSI Projekt",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30655088"
@@ -518,6 +518,76 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_email\":\"user11@user.pl\",\r\n    \"user_password\": \"user11\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "4LhY3fZUFebcCuxZwyf76Q==:mrnXA53S8So/XxiZPSKEFUxQiaJkybS3FUvULIMF8lpFrTUfTUdxTeYPzAzGEwcoy8qIURRMADOlO/D50ADxXj3xmAd3hb3FvR0MAptx6KA=",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
