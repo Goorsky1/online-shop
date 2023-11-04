@@ -1,0 +1,44 @@
+################################################################
+                             AUTH
+################################################################
+POST 	auth/login 	- logowanie                         [gość]
+
+
+################################################################
+                            USERS
+################################################################
+GET 	users 		- pobranie całej listy użytkowników [pracownik]
+POST 	users 		- dodanie nowego użytkownika        [gość]
+
+GET 	users/id 	- pobranie użytkownika po id        [pracownik]
+PATCH 	users/id 	- edycja danych konta               [klient, pracownik]
+DELETE 	users/id 	- usunięcie konta                   [klient, pracownik]
+
+
+################################################################
+                           PRODUCTS
+################################################################
+GET 	products    - pobranie całej listy produktów    [gość]
+POST 	products    - dodanie nowego produktu           [pracownik]
+
+GET 	products/id - pobranie produktu po id           [gość]
+PATCH 	products/id - edycja produktu                   [pracownik]
+DELETE 	products/id - usunięcie produktu                [pracownik]
+
+GET 	products/id/ratings - pobranie wszystkich ocen produktu [gość]
+POST 	products/id/ratings - dodanie oceny produktu            [klient]
+PATCH 	products/id/ratings - zmiana oceny produktu             [klient]
+
+GET     /products/idp/ratings/idu - pobranie oceny produktu konkretnego użytkownika     [gość]
+DELETE  /products/idp/ratings/idu - usunięcie oceny produktu konkretnego użytkownika    [klient, pracownik]
+
+
+################################################################
+                           PATTERNS
+################################################################
+GET     /patterns - pobranie wszystkich wzorów  [gość]
+POST    /patterns - dodanie nowego wzoru        [pracownik]
+
+GET     /patterns/id - pobranie wzoru po id     [gość]
+PATCH   /patterns/id - edycja wzoru             [pracownik]
+DELETE  /patterns/id - usunięcie wzoru          [pracownik]
