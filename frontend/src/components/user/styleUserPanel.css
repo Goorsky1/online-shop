@@ -1,0 +1,65 @@
+.panel {
+    margin-top: 5rem;
+    margin-left: 21rem;
+    margin-right: auto;
+    border-style: hidden;
+    border-radius: 15px;
+    max-width: 55rem;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+    background-color: #EEE4E1;
+    width: 40rem;
+}
+.panel{
+
+
+    padding-left: 3rem;
+    font-family: Verdana;
+}
+.formBasicEmail{
+    word-spacing: 3px;
+    font-size: medium;
+}
+.Login{
+    font-family: 'Helvetica Neue';
+    font-weight: 400;
+    font-size: 40px;
+    margin-bottom: 5px;
+    margin-top: 0;
+    margin-left: 13rem;
+    color: var(--header-font);
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 60px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 12px;
+}
+
+.form-control {
+    width: 90%;
+    border:none;
+    height: 2rem;
+    border-radius: 10px;
+}
+
+.button {
+    background-color: var(--button-color);
+    margin-left: 14rem;
+    margin-top: 16px;
+    font-family: Consolas;
+    color: var(--header-font);
+    border: none;
+
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 15px 32px;
+    text-align: center;
+    display: block;
+}

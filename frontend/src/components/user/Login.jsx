@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Container, Row, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import "./styleUserPanel.css"
 
 export function Login() {
     const navigate = useNavigate();
@@ -13,18 +14,14 @@ export function Login() {
         event.preventDefault();
 
         try {
-            const response = await axios.post('/auth/login', {
+            console.log('Request Payload:', { user_email: email, user_password: password });
+            const response = await axios.post('http://localhost:3000/api/auth/login', {
                 user_email: email,
                 user_password: password,
             });
-
-            // Assuming the response data structure is { token: '...', role: '...', user: { ... } }
-            // You might want to adjust this depending on your actual response structure.
             localStorage.setItem('token', response.data.token);
-            // navigate to the home page or user dashboard
             navigate('/');
         } catch (error) {
-            // Handle error response
             if (error.response) {
                 setError(error.response.data.message);
             } else {
@@ -34,13 +31,16 @@ export function Login() {
     }
 
     return (
-        <Container>
-            <Row className="justify-content-center align-items-center vh-100">
-                <Form className="w-75" onSubmit={handleSubmit}>
-                    <h1 className="text-center mb-4">Zaloguj się</h1>
+        <Container fluid>
+            <div className="panel">
+                <Row >
+                    <h1 className="Login">Zaloguj się</h1>
+                </Row>
+                <Row>
+                <Form className=" " onSubmit={handleSubmit}>
                     {error && <div className="alert alert-danger">{error}</div>}
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email</Form.Label>
+                        <Form.Label>Email </Form.Label>
                         <Form.Control
                             type="email"
                             placeholder="name@example.com"
@@ -50,7 +50,7 @@ export function Login() {
                         />
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Hasło</Form.Label>
+                        <Form.Label> Hasło </Form.Label>
                         <Form.Control
                             type="password"
                             placeholder="Hasło"
@@ -59,24 +59,12 @@ export function Login() {
                             required
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit" className="w-100 my-3">
+                    <Button  type="submit" className="button">
                         Zaloguj
                     </Button>
-                    <div className="text-center">
-                        Nie masz jeszcze konta?
-                        <Button
-                            variant="secondary"
-                            className="w-100 my-3"
-                            onClick={() => navigate('/register')}
-                        >
-                            Zarejestruj
-                        </Button>
-                        <p className="forgot-password-text" onClick={() => navigate('/password-recovery')}>
-                            Zapomniałeś hasła?
-                        </p>
-                    </div>
                 </Form>
             </Row>
+            </div>
         </Container>
     );
 }
