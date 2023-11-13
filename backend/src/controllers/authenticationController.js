@@ -21,7 +21,7 @@ class AuthenticationController {
 
         if (userData.user_password === user.user_password) {
             const token = createToken(user);
-            return res.json(formatResponse({ token }));
+            return res.json(formatResponse({ token, user }));
         } else {
             return res.status(401).json(formatError(`Invalid credentials`));
         }
