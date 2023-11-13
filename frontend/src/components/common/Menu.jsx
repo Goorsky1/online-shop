@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import { getUserData, removeUserData } from '../../utils/userSession'
 import "./menuCss.css"
-export function Menu() {
+import createApiClient from '../../utils/apiClient'
+import React, { useState, useLayoutEffect, useEffect } from 'react'
 
+export function Menu() {
     const navigate = useNavigate();
 
     const menuItems = [
@@ -24,8 +26,6 @@ export function Menu() {
         menuItems.push({ name: 'Register', path: '/register' })
         menuItems.push({ name: 'Log In', path: '/login' })
     }
-
-
 
     return (
         <div className='menu' >

@@ -1,7 +1,6 @@
 import './card.css'
 export function Card(props) {
     const product = props.product
-    console.log(product)
     return (
         < div className="card" >
             <div className="cardProperty">Name: {product.product_name}</div>

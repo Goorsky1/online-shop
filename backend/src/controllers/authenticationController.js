@@ -1,6 +1,7 @@
 const { formatResponse } = require("../models/Response");
 const { formatError } = require("../models/Error");
-const { createToken } = require("../utils/token");
+const { createToken, verifyTokenExpiration } = require("../utils/token");
+
 
 class AuthenticationController {
     constructor(repository) {
@@ -24,6 +25,30 @@ class AuthenticationController {
             return res.json(formatResponse({ token, user }));
         } else {
             return res.status(401).json(formatError(`Invalid credentials`));
+        }
+    }
+
+    async refresh(req, res) {
+        const token = req.headers.authorization;
+        if (token) {
+            const tokenPayload = verifyTokenExpiration(token);
+            if (tokenPayload.expired) {
+                return res.json(formatResponse(tokenPayload));
+            } else {
+                let user
+                try {
+                    user = await this.repository.getUserByEmail(tokenPayload.token.user_email)
+                    if (!user) {
+                        return res.status(404).json(formatError(`User with email ${userData.user_email} not found`));
+                    }
+                } catch (err) {
+                    return res.status(500).json(formatError(`Error getting user, ${err}`));
+                }
+                const newToken = createToken({ user_email: user.user_email, user_permissions: user.user_permissions });
+                return res.json(formatResponse({ token: newToken, user: user, expired: false }));
+            }
+        } else {
+            res.status(401).json(formatError(`Token is missing`));
         }
     }
 }
