@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import apiClient from '../../utils/apiClient'
+import createApiClient from '../../utils/apiClient'
 import { CardList } from '../common/CardList';
 
 export function ProductList() {
     const [products, setProducts] = useState([])
-
+    const apiClient = createApiClient()
     useEffect(() => {
         apiClient.get('/api/products')
             .then((response) => setProducts(response.data.data.products))
