@@ -41,6 +41,7 @@ const authenticationController = new AuthenticationController(userRepository);
 
 // AUTH
 router.post('/auth/login', validator(loginSchema.login), authenticationController.login.bind(authenticationController));
+router.get('/auth/refresh', authenticationController.refresh.bind(authenticationController));
 
 // USERS
 router.get('/users', authenticate, authorizeWorker, userController.getAllUsers.bind(userController));

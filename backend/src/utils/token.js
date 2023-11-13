@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const secretKey = 'maleslodkiekotkipilnujabackendu1'; //this has to be 32 bytes
-const tokenExpiration = 3600;
+const tokenExpiration = 3600 * 24; // 1 day
 
 function createToken(user) {
     const payload = {
@@ -22,9 +22,7 @@ function createToken(user) {
 }
 
 function verifyToken(token) {
-    console.log(token)
     const [ivString, encryptedPayload] = token.split(':');
-    console.log(ivString)
     const iv = Buffer.from(ivString, 'base64');
 
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secretKey), iv);
@@ -40,4 +38,21 @@ function verifyToken(token) {
     return tokenPayload;
 }
 
-module.exports = { createToken, verifyToken };
+function verifyTokenExpiration(token) {
+    const [ivString, encryptedPayload] = token.split(':');
+    const iv = Buffer.from(ivString, 'base64');
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secretKey), iv);
+    let decrypted = decipher.update(encryptedPayload, 'base64', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    const tokenPayload = JSON.parse(decrypted);
+
+    if (tokenPayload.exp <= Math.floor(Date.now() / 1000)) {
+        return { token: null, expired: true };
+    }
+
+    return { token: tokenPayload, expired: false };
+}
+
+module.exports = { createToken, verifyToken, verifyTokenExpiration };
