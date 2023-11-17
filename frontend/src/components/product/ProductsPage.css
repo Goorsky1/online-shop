@@ -41,7 +41,6 @@
     object-fit: fill;
 }
 
-
 .product-details {
     text-align: center;
 }
@@ -59,93 +58,20 @@
 
 .product_card_line_name {
     font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.product_card_line_value {
+    font-size: 1.2rem;
 }
 
 .product-title {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-}
-
-.product-filter-sort {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 0 3rem;
-    gap: 20px;
-}
-
-.product-filter {
-    padding: 0.5rem;
-    border: none;
-    border-bottom: 2px solid #dddddd;
-    border-radius: 3px;
-    width: 100%;
-    max-width: 300px;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-.product-filter:focus {
-    border-color: #aa10ff;
-}
-
-.product-sort {
-    padding: 0.5rem;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: box-shadow 0.3s, transform 0.3s;
-}
-
-.insurance_policy_select_label {
-    font-weight: bold;
-}
-
-.insurance_policy_select {
-    width: 100%;
-    max-width: 300px;
-    padding: 0.5rem;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: box-shadow 0.3s, transform 0.3s;
+    margin:auto;
+    text-align: center;
 }
 
 .form-control {
     background-color: #dddddd;
-}
-
-.form-control-choose {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.product-filter-choose {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 0;
-}
-
-.product-choose {
-    padding: 0.5rem;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    width: 100%;
-    max-width: 300px;
-    outline: none;
-    transition: border-color 0.3s;
-    background-color: #dddddd;
-    color: #090909;
-}
-
-.product-choose:focus {
-    border-color: #aa10ff;
 }
 
 .product-details-two-columns {
