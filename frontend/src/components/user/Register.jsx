@@ -72,7 +72,7 @@ export function Register() {
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </Form.Group>
-                        <Button type="submit" className="button">
+                        <Button type="submit" className="btn btn-primary button">
                             Zarejestruj
                         </Button>
                     </Form>

@@ -61,7 +61,7 @@ export function Login() {
                                 required
                             />
                         </Form.Group>
-                        <Button type="submit" className="button">
+                        <Button type="submit" className="btn btn-primary button">
                             Log In
                         </Button>
                     </Form>
