@@ -7,7 +7,7 @@ import { Profile } from "../user/Profile"
 
 export function Router() {
     return (
-        <>
+        <section className={'page_container'}>
             <Routes>
                 <Route path="/" element={<ProductsListPage />} />
                 <Route path="/login" element={<Login />} />
@@ -15,6 +15,6 @@ export function Router() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path='/products/*' element={<ProductsBasePage/>}/>
             </Routes>
-        </>
+        </section>
     )
 }

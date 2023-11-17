@@ -147,3 +147,14 @@
 .product-choose:focus {
     border-color: #aa10ff;
 }
+
+.product-details-two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 30px;
+}
+
+.product-details-two-columns p {
+    margin: 0;
+}
