@@ -23,7 +23,6 @@ export function ProductsListPage() {
 
     return (
         <div className='Products page_content'>
-            <h1>Example Component</h1>
             <div className={'product-list'}>
                 {products.map(product =>
                     <div key={product.product_id} className='product-card' onClick={() => {
