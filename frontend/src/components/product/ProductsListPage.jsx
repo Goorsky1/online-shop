@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom';
 import createApiClient from '../../utils/apiClient'
-import {CardList} from '../common/CardList';
 import {ProductCard} from "./ProductCard";
 
 export function ProductsListPage() {
@@ -17,19 +16,21 @@ export function ProductsListPage() {
     }, [])
 
     const goToDetailsPage = async (product) => {
-        navigate(`/products/details`, { state: { product } });
+        navigate(`/products/details`, {state: {product}});
     }
 
+    console.log(products)
+
     return (
-        <div>
+        <div className='Products page_content'>
             <h1>Example Component</h1>
             <div className={'product-list'}>
                 {products.map(product =>
-                <div key={product.product_id} className='product-card' onClick={() => {
-                    goToDetailsPage(product)
-                }}>
-                <ProductCard product={product} extra={false}/>
-                </div>
+                    <div key={product.product_id} className='product-card' onClick={() => {
+                        goToDetailsPage(product)
+                    }}>
+                        <ProductCard product={product} extra={false}/>
+                    </div>
                 )}
             </div>
         </div>
