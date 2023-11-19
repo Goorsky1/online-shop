@@ -1,26 +1,21 @@
-import React, {useState, useEffect} from 'react';
-import {Link, useLocation, useParams} from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import './ProductsPage.css';
-import {ProductCard} from './ProductCard.jsx';
-// import {ProductCardCool} from './ProductCardCool.jsx';
+import { ProductCard } from './ProductCard.jsx';
 
 export function ProductDetailsPage(props) {
-    const [product, setProduct] = useState(null);
+    const location = useLocation()
+
+    const [product, setProduct] = useState(location.state?.product);
+    window.history.pushState(location.state, '', '/')
+
 
     if (product) {
-        // if (user?.permissions === 'worker') {
-        //     return (
-        //         <div className="product">
-        //             <ProductCardCool product={product} extra={false} />
-        //         </div>
-        //     );
-        // } else {
-            return (
-                <div className="product page_content">
-                    <ProductCard product={product} extra={true}/>
-                </div>
-            );
-        // }
+        return (
+            <div className="product page_content">
+                <ProductCard product={product} extra={true} />
+            </div>
+        );
     } else {
         return (
             <div className="product page_content">
