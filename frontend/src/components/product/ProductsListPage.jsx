@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import createApiClient from '../../utils/apiClient'
-import {ProductCard} from "./ProductCard";
+import { ProductCard } from "./ProductCard";
 
 export function ProductsListPage() {
     const [products, setProducts] = useState([])
     const navigate = useNavigate();
     const apiClient = createApiClient()
+
     useEffect(() => {
         apiClient.get('/api/products')
             .then((response) => setProducts(response.data.data.products))
@@ -16,10 +17,8 @@ export function ProductsListPage() {
     }, [])
 
     const goToDetailsPage = async (product) => {
-        navigate(`/products/details`, {state: {product}});
+        navigate(`/products/details`, { state: { product } });
     }
-
-    console.log(products)
 
     return (
         <div className='Products page_content'>
@@ -28,7 +27,7 @@ export function ProductsListPage() {
                     <div key={product.product_id} className='product-card' onClick={() => {
                         goToDetailsPage(product)
                     }}>
-                        <ProductCard product={product} extra={false}/>
+                        <ProductCard product={product} extra={false} />
                     </div>
                 )}
             </div>
