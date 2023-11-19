@@ -1,4 +1,5 @@
 const { Product } = require("../models/Product");
+const fs = require('fs');
 
 class ProductRepository {
     constructor(db) {
@@ -12,7 +13,19 @@ class ProductRepository {
                 if (err) {
                     reject(err);
                 } else {
-                    const products = rows.map(row => new Product(row.product_id, row.product_name, row.product_color, row.product_material, row.product_diameter, row.product_width, row.pattern_id, row.product_count, row.product_price, row.product_description, row.product_image));
+                    const products = rows.map(row => new Product(
+                        row.product_id,
+                        row.product_name,
+                        row.product_color,
+                        row.product_material,
+                        row.product_diameter,
+                        row.product_width,
+                        row.pattern_id,
+                        row.product_count,
+                        row.product_price,
+                        row.product_description,
+                        row.product_image.toString('base64')
+                    ));
                     resolve(products);
                 }
             });
@@ -26,9 +39,21 @@ class ProductRepository {
                 if (err) {
                     reject(err);
                 } else if (row) {
-                    resolve(new Product(row.product_id, row.product_name, row.product_color, row.product_material, row.product_diameter, row.product_width, row.pattern_id, row.product_count, row.product_price, row.product_description, row.product_image));
+                    resolve(new Product(
+                        row.product_id,
+                        row.product_name,
+                        row.product_color,
+                        row.product_material,
+                        row.product_diameter,
+                        row.product_width,
+                        row.pattern_id,
+                        row.product_count,
+                        row.product_price,
+                        row.product_description,
+                        row.product_image.toString('base64')
+                    ));
                 } else {
-                    resolve()
+                    resolve();
                 }
             });
         });
@@ -46,7 +71,7 @@ class ProductRepository {
             product.product_count,
             product.product_price,
             product.product_description,
-            product.product_image
+            Buffer.from(product.product_image, 'base64')
         ];
 
         return new Promise((resolve, reject) => {
@@ -112,7 +137,7 @@ class ProductRepository {
             updatedProduct.product_count,
             updatedProduct.product_price,
             updatedProduct.product_description,
-            updatedProduct.product_image,
+            Buffer.from(updatedProduct.product_image, 'base64'),
             productId
         ];
 
@@ -132,7 +157,7 @@ class ProductRepository {
                         updatedProduct.product_count,
                         updatedProduct.product_price,
                         updatedProduct.product_description,
-                        updatedProduct.product_image,
+                        updatedProduct.product_image
                     ));
                 }
             });
