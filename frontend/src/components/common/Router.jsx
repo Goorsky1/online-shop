@@ -13,7 +13,7 @@ export function Router() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path='/products/*' element={<ProductsBasePage/>}/>
+                <Route path='/products/*' element={<ProductsBasePage />} />
             </Routes>
         </section>
     )
