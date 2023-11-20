@@ -28,18 +28,14 @@ export function ProductCard(props) {
             if (ratings.length > 0) {
                 setAvgRating(ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length)
             }
-        }).catch(error => {
-            console.error('Error fetching data:', error);
-        });
+        }).catch(error => { });
     }
 
     async function getUserRating() {
         apiClient.get(`/api/products/${product.product_id}/ratings/${userId}`)
             .then(response => {
                 setUserRating(response.data.data.rating.rating_value)
-            }).catch(error => {
-                console.error('Error fetching data:', error);
-            });
+            }).catch(error => { });
     }
 
     async function createUserRating(value) {
@@ -64,12 +60,27 @@ export function ProductCard(props) {
         });
     }
 
+    function mapAvailability(cnt) {
+        if (cnt >= 1 && cnt < 10) {
+            return "Low";
+        }
+        if (cnt >= 10 && cnt < 50) {
+            return "Medium";
+        }
+        if (cnt >= 50) {
+            return "High";
+        }
+        return cnt;
+    }
+
     useEffect(() => {
         getAvgRating()
     }, [userRating])
 
     useEffect(() => {
-        getUserRating()
+        if (userRating && extra) {
+            getUserRating()
+        }
     }, [])
 
     return (
@@ -79,12 +90,12 @@ export function ProductCard(props) {
                     src={`data:image/jpeg;base64,${product.product_image}`}
                     alt={product?.product_name} />
             </div>
-            <div className="mt-3"/>
+            <div className="mt-3" />
             <h3 className='product-title'>{product?.product_name}</h3>
             <div className='product-details'>
                 <div className='product-details-two-columns'>
                     <ProductCardLine name='Price' value={`${product?.product_price} €`} />
-                    <ProductCardLine name='Count' value={`${product?.product_count}`} />
+                    <ProductCardLine name='Availability' value={mapAvailability(product?.product_count)} />
                     {extra ?
                         <>
                             <ProductCardLine name='Description' value={`${product?.product_description}`} />
