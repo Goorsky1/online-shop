@@ -13,7 +13,9 @@ code {
 }
 
 :root {
-  --background-color: #ECF8F8;
+  /* ---------------------------- niepasujący niebieski z tła -----------------------------------*/
+  /* --background-color: #ECF8F8; */
+  /* ------------------------------------------------------------------------------------------- */
   --border-color: #212121;
   --font-color: black;
   --font-highlight-color: #654321;

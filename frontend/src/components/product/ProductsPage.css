@@ -66,7 +66,7 @@
 }
 
 .product-title {
-    margin:auto;
+    margin: auto;
     text-align: center;
 }
 
@@ -83,4 +83,25 @@
 
 .product-details-two-columns p {
     margin: 0;
+}
+
+.MuiPagination-ul {
+    justify-content: center;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.product .image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+
+.cart-btn {
+    margin-bottom: 1rem;
 }
