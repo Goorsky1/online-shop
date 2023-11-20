@@ -23,13 +23,17 @@ export function ProductsListPage() {
     return (
         <div className='Products page_content'>
             <div className={'product-list'}>
-                {products.map(product =>
-                    <div key={product.product_id} className='product-card' onClick={() => {
-                        goToDetailsPage(product)
-                    }}>
-                        <ProductCard product={product} extra={false} />
-                    </div>
-                )}
+                {products.map(product => {
+                    if (product.product_count !== 0) {
+                        return (
+                            <div key={product.product_id} className='product-card' onClick={() => {
+                                goToDetailsPage(product)
+                            }}>
+                                <ProductCard product={product} extra={false} />
+                            </div>
+                        )
+                    }
+                })}
             </div>
         </div>
     )
