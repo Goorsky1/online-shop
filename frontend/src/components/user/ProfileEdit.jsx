@@ -22,22 +22,26 @@ export function ProfileEdit() {
         const user = getUserData();
         const apiClient = createApiClient();
 
-        if (newPassword === "") {
-            setMessage('Password cannot be empty. Please try again.');
-            return;
-        } else if (newPassword !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             setMessage('Passwords do not match. Please check and try again.');
             return;
         } else if (newPassword === user.user.user_password) {
             setMessage('New password cannot be the same as the old password.');
             return;
+        } else if (newPassword.length > 0 && newPassword.length < 5) {
+            setMessage('Password must be at least 5 characters long.');
+            return;
         }
 
         try {
-            const response = await apiClient.patch(`/api/users/${user.user.user_id}`, {
+            const requestData = {
                 "user_phone": newPhone,
-                "user_password": newPassword
-            });
+            };
+            if (newPassword !== "") {
+                requestData.user_password = newPassword;
+            }
+            console.log("requestData:",requestData)
+            const response = await apiClient.patch(`/api/users/${user.user.user_id}`, requestData);
             setMessage(successMessage);
         } catch (error) {
             setMessage('Error updating profile. Please try again.');
@@ -83,6 +87,7 @@ export function ProfileEdit() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                 </div>
+                <p className="text-warning"><i>Leave empty to leave unchanged</i></p>
                 <div className={"mb-3 text-danger"}>{message}</div>
                 <div className="space"/>
                 <button type="submit" className="btn btn-primary">Save Changes</button>
