@@ -4,6 +4,7 @@ import { ProductsBasePage } from "../product/ProductsBasePage"
 import { Login } from "../user/Login"
 import { Register } from "../user/Register"
 import { Profile } from "../user/Profile"
+import {ProfileEdit} from "../user/ProfileEdit";
 
 export function Router() {
     return (
@@ -13,6 +14,7 @@ export function Router() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/edit" element={<ProfileEdit />} />
                 <Route path='/products/*' element={<ProductsBasePage />} />
             </Routes>
         </section>
