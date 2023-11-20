@@ -79,6 +79,7 @@ export function ProductCard(props) {
                     src={`data:image/jpeg;base64,${product.product_image}`}
                     alt={product?.product_name} />
             </div>
+            <div className="mt-3"/>
             <h3 className='product-title'>{product?.product_name}</h3>
             <div className='product-details'>
                 <div className='product-details-two-columns'>
