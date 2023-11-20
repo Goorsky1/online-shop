@@ -88,7 +88,9 @@ export function ProductCard(props) {
             <div className="image-container">
                 <img
                     src={`data:image/jpeg;base64,${product.product_image}`}
-                    alt={product?.product_name} />
+                    alt={product?.product_name}
+                    style={extra ? { marginTop: '2rem' } : {}} // css is brutal, use conditional margin
+                />
             </div>
             <div className="mt-3" />
             <h3 className='product-title'>{product?.product_name}</h3>
@@ -103,6 +105,8 @@ export function ProductCard(props) {
                             <ProductCardLine name='Diameter' value={`${product?.product_diameter} mm`} />
                             <ProductCardLine name='Width' value={`${product?.product_width} mm`} />
                             <ProductCardLine name='Material' value={`${product?.product_material}`} />
+                            <ProductCardLine name='Theme' value={`${product?.pattern.pattern_theme}`} />
+                            <ProductCardLine name='Pattern' value={`${product?.pattern.pattern_name}`} />
                         </>
                         : null}
                     <ProductCardLine name={extra ? 'User Rating' : 'Rating'}
@@ -128,11 +132,11 @@ export function ProductCard(props) {
                                 />}
                         />
                     </> : null}
-                    {userData ? <>
-                        <button className="btn btn-primary">{'Add to cart'}</button>
-                    </> : null
-                    }
                 </div>
+                {userData ? <>
+                    <button className="cart-btn btn btn-primary">{'Add to cart'}</button>
+                </> : null
+                }
             </div>
         </div>
     )
