@@ -19,12 +19,11 @@ class AuthenticationController {
         } catch (err) {
             return res.status(500).json(formatError(`Error retrieving data, ${err}`));
         }
-
-        if (userData.user_password === user.user_password) {
+        if (userData.user_password !== user.user_password || user.user_status === "deleted") {
+            return res.status(401).json(formatError(`Invalid credentials`));
+        } else {
             const token = createToken(user);
             return res.json(formatResponse({ token, user }));
-        } else {
-            return res.status(401).json(formatError(`Invalid credentials`));
         }
     }
 
