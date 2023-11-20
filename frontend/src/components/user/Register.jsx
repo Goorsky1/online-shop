@@ -18,13 +18,13 @@ export function Register() {
             const user = {
                 user_email: email,
                 user_password: password,
-                user_status: 'active',  // Domyślny status
-                user_phone: phone,
-                user_permissions: 'client'  // Domyślne uprawnienia
+                user_status: 'active',
+                user_phone: phone.toString(),
+                user_permissions: 'client'
             };
-            console.log('Request Payload:', user);
-            const response = await axios.post('http://localhost:3000/api/users', user);
-            navigate('/login'); // Przekierowanie do logowania po pomyślnej rejestracji
+            // console.log('Request Payload:', user);
+            const response = await axios.post('/api/users', user);
+            navigate('/login');
         } catch (error) {
             if (error.response) {
                 setError(error.response.data.message);
@@ -37,14 +37,14 @@ export function Register() {
     return (
         <Container fluid>
             <div className="panel">
-                <Row >
-                    <h1 className="Login">Zarejestruj się</h1>
+                <Row>
+                    <h1 className="Login">Register</h1>
                 </Row>
                 <Row>
                     <Form onSubmit={handleSubmit}>
                         {error && <div className="alert alert-danger">{error}</div>}
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email </Form.Label>
+                            <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="name@example.com"
@@ -54,27 +54,27 @@ export function Register() {
                             />
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Hasło </Form.Label>
+                            <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Hasło"
+                                placeholder="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                minLength={5}
                                 required
                             />
                         </Form.Group>
                         <Form.Group controlId="formBasicPhone">
-                            <Form.Label>Numer Telefonu </Form.Label>
+                            <Form.Label>Phone Number</Form.Label>
                             <Form.Control
-                                type="text"
-                                placeholder="Telefon"
+                                type="number"
+                                placeholder="phone number"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </Form.Group>
-                        <Button type="submit" className="btn btn-primary button">
-                            Zarejestruj
-                        </Button>
+                        <div className="mt-4"/>
+                        <button type="submit" className="btn btn-primary login-button">Register</button>
                     </Form>
                 </Row>
             </div>

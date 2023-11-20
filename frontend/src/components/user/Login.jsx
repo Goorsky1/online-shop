@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Row, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import createApiClient from '../../utils/apiClient'
-import { setUserData } from '../../utils/userSession'
-import "./styleUserPanel.css"
+import createApiClient from '../../utils/apiClient';
+import { setUserData } from '../../utils/userSession';
+import './styleUserPanel.css';
 
 export function Login() {
     const navigate = useNavigate();
@@ -13,21 +13,20 @@ export function Login() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-
         try {
             console.log('Request Payload:', { user_email: email, user_password: password });
-            const apiClient = createApiClient()
+            const apiClient = createApiClient();
             const response = await apiClient.post('api/auth/login', {
                 user_email: email,
                 user_password: password,
             });
-            setUserData(response.data.data)
+            setUserData(response.data.data);
             navigate('/');
         } catch (error) {
             if (error.response) {
                 setError(error.response.data.error.message);
             } else {
-                setError('The request was made but no response was received');
+                setError('The request was made, but no response was received');
             }
         }
     }
@@ -35,11 +34,11 @@ export function Login() {
     return (
         <Container fluid>
             <div className="panel">
-                <Row >
+                <Row>
                     <h1 className="Login">Log In</h1>
                 </Row>
                 <Row>
-                    <Form className=" " onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit}>
                         {error && <div className="alert alert-danger">{error}</div>}
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email </Form.Label>
@@ -55,15 +54,14 @@ export function Login() {
                             <Form.Label> Password </Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Password"
+                                placeholder="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                         </Form.Group>
-                        <Button type="submit" className="btn btn-primary button">
-                            Log In
-                        </Button>
+                        <div className="mt-4"/>
+                        <button type="submit" className="btn btn-primary login-button">Log In</button>
                     </Form>
                 </Row>
             </div>
