@@ -20,6 +20,10 @@
     min-width: 100%;
 }
 
+.product-filters {
+    display: flex;
+}
+
 .product-card {
     flex: 1 1 calc(33% - 2rem);
     max-width: calc(33% - 2rem);
@@ -86,6 +90,10 @@
 
 .product-details-two-columns p {
     margin: 0;
+}
+
+.css-wanzkd-MuiStack-root {
+    margin-top: 0px;
 }
 
 .MuiPagination-ul {
