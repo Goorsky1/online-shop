@@ -9,7 +9,7 @@ import './ProductsPage.css'
 export function ProductsListPage() {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
     const navigate = useNavigate();
     const apiClient = createApiClient();
 
