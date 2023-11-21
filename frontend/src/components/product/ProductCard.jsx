@@ -7,7 +7,7 @@ import { getUserData } from '../../utils/userSession';
 export function ProductCardLine({ name, value }) {
     return (
         <div>
-            <span className='product_card_line_name'>{name}: </span>
+            <span className='product_card_line_name'>{name} </span>
             <span className='product_card_line_value'>{value}</span>
         </div>
     )
@@ -98,10 +98,10 @@ export function ProductCard(props) {
                 <div className='product-details-two-columns'>
                     <ProductCardLine name='Price' value={`${product?.product_price} €`} />
                     <ProductCardLine name='Availability' value={mapAvailability(product?.product_count)} />
+                    <ProductCardLine name='Color' value={`${product?.product_color}`} />
+
                     {extra ?
                         <>
-                            <ProductCardLine name='Description' value={`${product?.product_description}`} />
-                            <ProductCardLine name='Color' value={`${product?.product_color}`} />
                             <ProductCardLine name='Diameter' value={`${product?.product_diameter} mm`} />
                             <ProductCardLine name='Width' value={`${product?.product_width} mm`} />
                             <ProductCardLine name='Material' value={`${product?.product_material}`} />
@@ -109,30 +109,35 @@ export function ProductCard(props) {
                             <ProductCardLine name='Pattern' value={`${product?.pattern.pattern_name}`} />
                         </>
                         : null}
-                    <ProductCardLine name={extra ? 'User Rating' : 'Rating'}
+
+                </div>
+                {extra ? <>
+                    <hr></hr>
+                    <ProductCardLine name='Description' value={`${product?.product_description}`} />
+                    <hr></hr>
+                </> : null}
+                <ProductCardLine name={extra ? 'User Rating' : 'Rating'}
+                    value={
+                        <Rating name="read-only"
+                            value={avgRating}
+                            readOnly
+                            precision={0.5}
+                            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                        />}
+                />
+                {userData && extra ? <>
+                    <ProductCardLine name='Your Rating'
                         value={
-                            <Rating name="read-only"
-                                value={avgRating}
-                                readOnly
-                                precision={0.5}
+                            <Rating name="edit"
+                                value={userRating}
+                                onChange={(e, value) => {
+                                    e.preventDefault()
+                                    userRating ? editUserRating(value) : createUserRating(value)
+                                }}
                                 emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                             />}
                     />
-
-                    {userData && extra ? <>
-                        <ProductCardLine name='Your Rating'
-                            value={
-                                <Rating name="edit"
-                                    value={userRating}
-                                    onChange={(e, value) => {
-                                        e.preventDefault()
-                                        userRating ? editUserRating(value) : createUserRating(value)
-                                    }}
-                                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                                />}
-                        />
-                    </> : null}
-                </div>
+                </> : null}
                 {userData ? <>
                     <button className="cart-btn btn btn-primary">{'Add to cart'}</button>
                 </> : null
