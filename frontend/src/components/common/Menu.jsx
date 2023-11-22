@@ -16,6 +16,8 @@ export function Menu() {
     if (userData) {
         menuItems.push({ name: 'Profile', path: '/profile' })
         menuItems.push({ name: 'Cart', path: '/cart' })
+        if (userData.user.user_permissions==="admin")
+            menuItems.push({ name: 'Admin Panel', path: '/admin/panel' })
         menuItems.push({
             name: 'Log Out', path: '/', onClickFunc: () => {
                 removeUserData()
