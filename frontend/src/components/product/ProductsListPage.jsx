@@ -7,6 +7,9 @@ import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import './ProductsPage.css';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export function ProductsListPage() {
     const [products, setProducts] = useState([]);
@@ -21,6 +24,7 @@ export function ProductsListPage() {
     const [possiblePatternValues, setPossiblePatternValues] = useState([]);
     const [selectedPatternThemes, setSelectedPatternThemes] = useState([]);
     const [possiblePatternThemes, setPossiblePatternThemes] = useState([]);
+    const [searchText, setSearchText] = useState('');
     const navigate = useNavigate();
     const apiClient = createApiClient();
 
@@ -52,7 +56,23 @@ export function ProductsListPage() {
         };
 
         fetchData();
-    }, [page, sortBy, sortOrder, selectedColors, selectedPatternValues, selectedPatternThemes]);
+    }, [page, sortBy, sortOrder, selectedColors, selectedPatternValues, selectedPatternThemes, searchText]);
+
+    const handleSortChange = (event) => {
+        const selectedSort = event.target.value;
+        const sorts = selectedSort.split('-');
+        setSortBy(sorts[0]);
+        setSortOrder(sorts[1]);
+        applyFilters(products);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value);
+    };
 
     const applyFilters = (products) => {
         if (selectedColors.length > 0) {
@@ -68,6 +88,12 @@ export function ProductsListPage() {
         if (selectedPatternThemes.length > 0) {
             products = products.filter((product) =>
                 selectedPatternThemes.includes(product.pattern.pattern_theme)
+            );
+        }
+
+        if (searchText.trim() !== '') {
+            products = products.filter((product) =>
+                product.product_name.toLowerCase().includes(searchText.toLowerCase())
             );
         }
 
@@ -90,57 +116,73 @@ export function ProductsListPage() {
         setCurrentProducts(sortedProducts.slice(indexOfFirstItem, indexOfLastItem));
     };
 
-    const handleSortChange = (event) => {
-        const selectedSort = event.target.value;
-        const sorts = selectedSort.split('-');
-        setSortBy(sorts[0]);
-        setSortOrder(sorts[1]);
-        applyFilters(products);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
     return (
         <div className="Products page_content">
-            <div className="product-filters">
-                <label htmlFor="sortSelect">Sort by:</label>
-                <select id="sortSelect" value={`${sortBy}-${sortOrder}`} onChange={handleSortChange}>
-                    <option value="product_name-asc">Name (asc)</option>
-                    <option value="product_name-desc">Name (desc)</option>
-                    <option value="product_price-asc">Price (asc)</option>
-                    <option value="product_price-desc">Price (desc)</option>
-                    <option value="product_count-asc">Availability (asc)</option>
-                    <option value="product_count-desc">Availability (desc)</option>
-                </select>
+            <div className="product-controls">
+                <div className='sorters'>
+                    <h4 className='header'>Sort</h4>
+                    <div className='select-controls'>
+                        <FormControl fullWidth>
+                            <Select
+                                id="product-select"
+                                value={`${sortBy}-${sortOrder}`}
+                                onChange={handleSortChange}
+                            >
+                                <MenuItem value="product_name-asc">Name (asc)</MenuItem>
+                                <MenuItem value="product_name-desc">Name (desc)</MenuItem>
+                                <MenuItem value="product_price-asc">Price (asc)</MenuItem>
+                                <MenuItem value="product_price-desc">Price (desc)</MenuItem>
+                                <MenuItem value="product_count-asc">Availability (asc)</MenuItem>
+                                <MenuItem value="product_count-desc">Availability (desc)</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                </div>
+                <div className='filters'>
+                    <h4 className='header'>Filter</h4>
+                    <div className='filter-controls'>
+                        <Autocomplete
+                            multiple
+                            fullWidth
+                            id="colorFilter"
+                            options={possibleColors}
+                            value={selectedColors}
+                            onChange={(_, newValue) => setSelectedColors(newValue)}
+                            renderInput={(params) => <TextField {...params} label="Color" />}
+                        />
 
-                <Autocomplete
-                    multiple
-                    id="colorFilter"
-                    options={possibleColors}
-                    value={selectedColors}
-                    onChange={(_, newValue) => setSelectedColors(newValue)}
-                    renderInput={(params) => <TextField {...params} label="Color" />}
-                />
+                        <Autocomplete
+                            multiple
+                            fullWidth
+                            id="patternValueFilter"
+                            options={possiblePatternValues}
+                            value={selectedPatternValues}
+                            onChange={(_, newValue) => setSelectedPatternValues(newValue)}
+                            renderInput={(params) => <TextField {...params} label="Pattern" />}
+                        />
 
-                <Autocomplete
-                    multiple
-                    id="patternValueFilter"
-                    options={possiblePatternValues}
-                    value={selectedPatternValues}
-                    onChange={(_, newValue) => setSelectedPatternValues(newValue)}
-                    renderInput={(params) => <TextField {...params} label="Pattern Value" />}
-                />
-
-                <Autocomplete
-                    multiple
-                    id="patternThemeFilter"
-                    options={possiblePatternThemes}
-                    value={selectedPatternThemes}
-                    onChange={(_, newValue) => setSelectedPatternThemes(newValue)}
-                    renderInput={(params) => <TextField {...params} label="Pattern Theme" />}
-                />
+                        <Autocomplete
+                            multiple
+                            fullWidth
+                            id="patternThemeFilter"
+                            options={possiblePatternThemes}
+                            value={selectedPatternThemes}
+                            onChange={(_, newValue) => setSelectedPatternThemes(newValue)}
+                            renderInput={(params) => <TextField {...params} label="Theme" />}
+                        />
+                    </div>
+                </div>
+                <div className='search'>
+                    <h4 className='header'>Search</h4>
+                    <div className='search-controls'>
+                        <TextField
+                            fullWidth
+                            label="Search by Name"
+                            value={searchText}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+                </div>
             </div>
 
             <div className="product-content">
