@@ -6,7 +6,7 @@ import { Register } from "../user/Register"
 import { Profile } from "../user/Profile"
 import { ProfileEdit } from "../user/ProfileEdit"
 import { AdminScreen } from "../admin/AdminPanelScreen"
-import { PatternPanelScreen } from "../admin/PatternScreen";
+import { AdminPatternsScreen } from "../admin/PatternScreen";
 
 
 
@@ -21,7 +21,8 @@ export function Router() {
                 <Route path="/profile/edit" element={<ProfileEdit />} />
                 <Route path='/products/*' element={<ProductsBasePage />} />
                 <Route path='/admin/panel' element={<AdminScreen />} />
-                <Route path='/admin/patterns' element={<PatternPanelScreen />} />
+                <Route path='/admin/patterns' element={<AdminPatternsScreen />} />
+
                 <Route path='/admin/users' element={<ProductsBasePage />} />
                 <Route path='/admin/products' element={<ProductsBasePage />} />
             </Routes>
