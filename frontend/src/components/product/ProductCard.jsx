@@ -23,7 +23,7 @@ export function ProductCard(props) {
 
 
     async function getAvgRating() {
-        apiClient.get(`/api/products/${product.product_id}/ratings`).then(response => {
+        await apiClient.get(`/api/products/${product.product_id}/ratings`).then(response => {
             const ratings = response.data.data.ratings;
             if (ratings.length > 0) {
                 setAvgRating(ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length)
@@ -32,14 +32,14 @@ export function ProductCard(props) {
     }
 
     async function getUserRating() {
-        apiClient.get(`/api/products/${product.product_id}/ratings/${userId}`)
+        await apiClient.get(`/api/products/${product.product_id}/ratings/${userId}`)
             .then(response => {
                 setUserRating(response.data.data.rating.rating_value)
             }).catch(error => { });
     }
 
     async function createUserRating(value) {
-        apiClient.post(`/api/products/${product.product_id}/ratings`, {
+        await apiClient.post(`/api/products/${product.product_id}/ratings`, {
             user_id: userId,
             rating_value: value
         }).then(response => {
@@ -50,7 +50,7 @@ export function ProductCard(props) {
     }
 
     async function editUserRating(value) {
-        apiClient.patch(`/api/products/${product.product_id}/ratings`, {
+        await apiClient.patch(`/api/products/${product.product_id}/ratings`, {
             user_id: userId,
             rating_value: value
         }).then(response => {
@@ -78,7 +78,7 @@ export function ProductCard(props) {
     }, [userRating])
 
     useEffect(() => {
-        if (userRating && extra) {
+        if (userData && extra) {
             getUserRating()
         }
     }, [])
