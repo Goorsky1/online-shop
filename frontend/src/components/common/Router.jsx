@@ -5,8 +5,12 @@ import { Login } from "../user/Login"
 import { Register } from "../user/Register"
 import { Profile } from "../user/Profile"
 import {ProfileEdit} from "../user/ProfileEdit";
+import ShoppingCart from "./ShoppingCart";
 
-export function Router() {
+export function Router(props) {
+    const {productsInCart, addProductToCart} = props
+    console.log("router productsInCart: ", productsInCart)
+
     return (
         <section className={'page_container'}>
             <Routes>
@@ -15,7 +19,9 @@ export function Router() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/edit" element={<ProfileEdit />} />
-                <Route path='/products/*' element={<ProductsBasePage />} />
+                <Route path="/cart" element={<ShoppingCart productsInCart={productsInCart}/>} />
+                <Route path='/products/*' element={<ProductsBasePage productsInCart={productsInCart}
+                                                                     addProductToCart={addProductToCart}/>} />
             </Routes>
         </section>
     )

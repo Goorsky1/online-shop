@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { Rating } from '@mui/material';
+import React, {useState, useEffect} from 'react'
+import {Rating} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import createApiClient from '../../utils/apiClient';
-import { getUserData } from '../../utils/userSession';
+import {getUserData} from '../../utils/userSession';
 
-export function ProductCardLine({ name, value }) {
+export function ProductCardLine({name, value}) {
     return (
         <div>
             <span className='product_card_line_name'>{name} </span>
@@ -14,13 +14,12 @@ export function ProductCardLine({ name, value }) {
 }
 
 export function ProductCard(props) {
-    const { product, extra } = props
+    const {product, extra, productsInCart, addProductToCart} = props
     const [avgRating, setAvgRating] = useState(null)
     const [userRating, setUserRating] = useState(null)
     const userData = getUserData()
     const userId = userData?.user.user_id
     const apiClient = createApiClient()
-
 
     async function getAvgRating() {
         await apiClient.get(`/api/products/${product.product_id}/ratings`).then(response => {
@@ -28,14 +27,16 @@ export function ProductCard(props) {
             if (ratings.length > 0) {
                 setAvgRating(ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length)
             }
-        }).catch(error => { });
+        }).catch(error => {
+        });
     }
 
     async function getUserRating() {
         await apiClient.get(`/api/products/${product.product_id}/ratings/${userId}`)
             .then(response => {
                 setUserRating(response.data.data.rating.rating_value)
-            }).catch(error => { });
+            }).catch(error => {
+            });
     }
 
     async function createUserRating(value) {
@@ -89,57 +90,58 @@ export function ProductCard(props) {
                 <img
                     src={`data:image/jpeg;base64,${product.product_image}`}
                     alt={product?.product_name}
-                    style={extra ? { marginTop: '2rem' } : {}} // css is brutal, use conditional margin
+                    style={extra ? {marginTop: '2rem'} : {}} // css is brutal, use conditional margin
                 />
             </div>
-            <div className="mt-3" />
+            <div className="mt-3"/>
             <h3 className='product-title'>{product?.product_name}</h3>
             <div className='product-details'>
                 <div className='product-details-two-columns'>
-                    <ProductCardLine name='Price' value={`${product?.product_price} €`} />
-                    <ProductCardLine name='Availability' value={mapAvailability(product?.product_count)} />
-                    <ProductCardLine name='Color' value={`${product?.product_color}`} />
+                    <ProductCardLine name='Price' value={`${product?.product_price} €`}/>
+                    <ProductCardLine name='Availability' value={mapAvailability(product?.product_count)}/>
+                    <ProductCardLine name='Color' value={`${product?.product_color}`}/>
 
                     {extra ?
                         <>
-                            <ProductCardLine name='Diameter' value={`${product?.product_diameter} mm`} />
-                            <ProductCardLine name='Width' value={`${product?.product_width} mm`} />
-                            <ProductCardLine name='Material' value={`${product?.product_material}`} />
-                            <ProductCardLine name='Theme' value={`${product?.pattern.pattern_theme}`} />
-                            <ProductCardLine name='Pattern' value={`${product?.pattern.pattern_name}`} />
+                            <ProductCardLine name='Diameter' value={`${product?.product_diameter} mm`}/>
+                            <ProductCardLine name='Width' value={`${product?.product_width} mm`}/>
+                            <ProductCardLine name='Material' value={`${product?.product_material}`}/>
+                            <ProductCardLine name='Theme' value={`${product?.pattern.pattern_theme}`}/>
+                            <ProductCardLine name='Pattern' value={`${product?.pattern.pattern_name}`}/>
                         </>
                         : null}
 
                 </div>
                 {extra ? <>
                     <hr></hr>
-                    <ProductCardLine name='Description' value={`${product?.product_description}`} />
+                    <ProductCardLine name='Description' value={`${product?.product_description}`}/>
                     <hr></hr>
                 </> : null}
                 <ProductCardLine name={extra ? 'User Rating' : 'Rating'}
-                    value={
-                        <Rating name="read-only"
-                            value={avgRating}
-                            readOnly
-                            precision={0.5}
-                            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                        />}
+                                 value={
+                                     <Rating name="read-only"
+                                             value={avgRating}
+                                             readOnly
+                                             precision={0.5}
+                                             emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
+                                     />}
                 />
                 {userData && extra ? <>
                     <ProductCardLine name='Your Rating'
-                        value={
-                            <Rating name="edit"
-                                value={userRating}
-                                onChange={(e, value) => {
-                                    e.preventDefault()
-                                    userRating ? editUserRating(value) : createUserRating(value)
-                                }}
-                                emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                            />}
+                                     value={
+                                         <Rating name="edit"
+                                                 value={userRating}
+                                                 onChange={(e, value) => {
+                                                     e.preventDefault()
+                                                     userRating ? editUserRating(value) : createUserRating(value)
+                                                 }}
+                                                 emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
+                                         />}
                     />
                 </> : null}
                 {userData ? <>
-                    <button className="cart-btn btn btn-primary">{'Add to cart'}</button>
+                    <button className="cart-btn btn btn-primary"
+                            onClick={() => addProductToCart(product)}>{'Add to cart'}</button>
                 </> : null
                 }
             </div>

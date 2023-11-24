@@ -11,7 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export function ProductsListPage() {
+export function ProductsListPage(props) {
+    const {productsInCart, addProductToCart} = props;
     const [products, setProducts] = useState([]);
     const [currentProducts, setCurrentProducts] = useState([]);
     const [page, setPage] = useState(1);
@@ -197,7 +198,8 @@ export function ProductsListPage() {
                                         navigate(`/products/details`, { state: { product } });
                                     }}
                                 >
-                                    <ProductCard product={product} extra={false} />
+                                    <ProductCard product={product} extra={false} productsInCart={productsInCart} addProductToCart={addProductToCart} />
+                                    <button className="cart-btn btn btn-primary" onClick={() => addProductToCart(product)}>{'Add to cart'}</button>
                                 </div>
                             );
                         }
