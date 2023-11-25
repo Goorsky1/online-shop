@@ -6,7 +6,7 @@ const userSchemas = {
         user_password: Joi.string().min(5).required(),
         user_status: Joi.string().valid('active', 'deleted').required(),
         user_phone: Joi.string().pattern(/^[0-9]{9}$/).required(),
-        user_permissions: Joi.string().valid('client', 'admin').required(),
+        user_permissions: Joi.string().valid('client', 'worker').required(),
     }),
 
     modifyUser: Joi.object().keys({
@@ -14,7 +14,7 @@ const userSchemas = {
         user_password: Joi.string().min(5).optional(),
         user_status: Joi.string().valid('active', 'deleted').optional(),
         user_phone: Joi.string().pattern(/^[0-9]{9}$/).optional(),
-        user_permissions: Joi.string().valid('client', 'admin').optional(),
+        user_permissions: Joi.string().valid('client', 'worker').optional(),
     }).min(1),
 
 };
