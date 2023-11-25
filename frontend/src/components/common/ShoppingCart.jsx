@@ -22,6 +22,11 @@ export function ShoppingCart(props) {
     const {productsInCart, onQuantityChange, onProductRemove} = props;
     const navigate = useNavigate()
 
+    const totalCost = productsInCart.reduce(
+        (total, product) => total + product.product_price * product.count,
+        0
+    ).toFixed(2);
+
     return (
         <div>
             <div className="cart-products">
@@ -44,9 +49,9 @@ export function ShoppingCart(props) {
                                 }}>
                                     <h2>{product.product_name}</h2>
                                 </div>
-                                <div className="product-price">
-                                    <h3>Price</h3>
-                                    {product.product_price}€
+                                <div className="product-availability">
+                                    <h3>Availability</h3>
+                                    {mapAvailability(product?.product_count)}
                                 </div>
                                 <div className="product-count">
                                     <h3>Count</h3>
@@ -67,9 +72,9 @@ export function ShoppingCart(props) {
                                         })}
                                     </select>
                                 </div>
-                                <div className="product-availability">
-                                    <h3>Availability</h3>
-                                    {mapAvailability(product?.product_count)}
+                                <div className="product-price">
+                                    <h3>Price</h3>
+                                    {(product.product_price * product.count).toFixed(2)}€
                                 </div>
                                 <div className="remove-from-cart-button">
                                     <button
@@ -83,12 +88,20 @@ export function ShoppingCart(props) {
                         </div>
                     </div>
                 ))}
-                {productsInCart.length > 0 && (
-                    <button type="submit" className="btn btn-primary login-button">
-                        Proceed to checkout
-                    </button>
-                )}
-                <hr/>
+                {productsInCart.length > 0 ?
+                    <>
+                        <hr className="mb-3" />
+                        <div className="total-cost">
+                            <h3>Total Cost</h3>
+                            {totalCost}€
+                        </div>
+                        <hr className="mb-3"/>
+                        <button type="submit" className="btn btn-primary checkout-button">
+                            Proceed to checkout
+                        </button>
+                    </>
+                     : <hr/>
+                }
             </div>
         </div>
     );
