@@ -129,6 +129,7 @@
     width: 216px;
     height: 119px;
     margin: auto 30px auto 10px;
+    cursor: pointer;
 }
 
 .product-name {

@@ -138,12 +138,9 @@ export function ProductCard(props) {
                                                  emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}
                                          />}
                     />
-                </> : null}
-                {userData ? <>
                     <button className="cart-btn btn btn-primary"
                             onClick={() => addProductToCart(product)}>{'Add to cart'}</button>
-                </> : null
-                }
+                </> : null}
             </div>
         </div>
     )

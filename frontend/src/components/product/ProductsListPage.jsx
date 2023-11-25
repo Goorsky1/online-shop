@@ -199,7 +199,7 @@ export function ProductsListPage(props) {
                                     }}
                                 >
                                     <ProductCard product={product} extra={false} productsInCart={productsInCart} addProductToCart={addProductToCart} />
-                                    <button className="cart-btn btn btn-primary" onClick={() => addProductToCart(product)}>{'Add to cart'}</button>
+                                    {/*<button className="cart-btn btn btn-primary" onClick={() => addProductToCart(product)}>{'Add to cart'}</button>*/}
                                 </div>
                             );
                         }
