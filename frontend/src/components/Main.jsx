@@ -2,9 +2,10 @@ import {Header} from './common/Header.jsx'
 import Refresh from './common/Refresh.jsx'
 import {Router} from './common/Router.jsx'
 import {useEffect, useState} from 'react'
-import ShoppingCart from "./common/ShoppingCart";
 
 function Cart() {
+    const [showCartSuccessToast, setShowCartSuccessToast] = useState(false);
+    const [showCartWarningToast, setShowCartWarningToast] = useState(false);
     const [productsInCart, setProductsInCart] =
         useState(
             JSON.parse(
@@ -27,14 +28,20 @@ function Cart() {
                     : item
             );
             setProductsInCart(latestCartUpdate);
+            setShowCartWarningToast(true);
         } else {
             const newProduct = {
                 ...product,
                 count: 1,
             }
             setProductsInCart([...productsInCart, newProduct,])
+            setShowCartSuccessToast(true);
         }
-        console.log("productsInCart: ", productsInCart)
+        setTimeout(() => {
+            setShowCartSuccessToast(false);
+            setShowCartWarningToast(false);
+        }, 3000);
+        // console.log("productsInCart: ", productsInCart)
     }
 
     const onQuantityChange = (productId, count) => {
@@ -66,19 +73,29 @@ function Cart() {
         productsInCart,
         addProductToCart,
         onQuantityChange,
-        onProductRemove
+        onProductRemove,
+        showCartSuccessToast,
+        setShowCartSuccessToast,
+        showCartWarningToast,
+        setShowCartWarningToast
     }
 }
 
 export function Main() {
-    const {productsInCart, addProductToCart, onQuantityChange, onProductRemove} = Cart();
+    const {
+        productsInCart, addProductToCart, onQuantityChange, onProductRemove, showCartSuccessToast,
+        setShowCartSuccessToast, showCartWarningToast, setShowCartWarningToast
+    } = Cart();
 
     return (
         <div className='Main'>
             <Header/>
             <Refresh/>
             <div className='content'>
-                <Router productsInCart={productsInCart} addProductToCart={addProductToCart} onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}/>
+                <Router productsInCart={productsInCart} addProductToCart={addProductToCart}
+                        onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}
+                        showCartSuccessToast={showCartSuccessToast} setShowCartSuccessToast={setShowCartSuccessToast}
+                        showCartWarningToast={showCartWarningToast} setShowCartWarningToast={setShowCartWarningToast}/>
             </div>
             {/*<ShoppingCart productsInCart={productsInCart}/>*/}
         </div>
