@@ -22,8 +22,8 @@ const authenticate = createAuthMiddleware(userRepository)
 
 const { createAuthorizationMiddleware } = require("../middleware/authorization")
 const authorizeClient = createAuthorizationMiddleware(['client'])
-const authorizeWorker = createAuthorizationMiddleware(['admin'])
-const authorizeClientOrWorker = createAuthorizationMiddleware(['admin', 'client'])
+const authorizeWorker = createAuthorizationMiddleware(['worker'])
+const authorizeClientOrWorker = createAuthorizationMiddleware(['worker', 'client'])
 
 const { userSchemas } = require("../schemas/userSchema");
 const { patternSchemas } = require("../schemas/patternSchema");

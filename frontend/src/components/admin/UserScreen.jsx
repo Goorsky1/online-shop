@@ -35,7 +35,11 @@ export const AdminUsersScreen = () => {
     const fetchUsers = async () => {
         try {
             const response = await axios.get('/api/users');
-            setUsers(response.data.users || []);
+            if (response.data && response.data.data && response.data.data.users)
+                setUsers(response.data.data.users || []);
+            else
+                setError('Received unexpected data format from the server');
+
         } catch (err) {
             setError(err.message);
             setUsers([]);
