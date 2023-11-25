@@ -8,6 +8,7 @@ import { ProfileEdit } from "../user/ProfileEdit"
 import { AdminScreen } from "../admin/AdminPanelScreen"
 import { AdminPatternsScreen } from "../admin/PatternScreen";
 import {AdminUsersScreen} from "../admin/UserScreen";
+import {ProductsAdminScreen} from "../admin/ProductsAdminScreen";
 
 
 
@@ -25,7 +26,7 @@ export function Router() {
                 <Route path='/admin/patterns' element={<AdminPatternsScreen />} />
 
                 <Route path='/admin/users' element={<AdminUsersScreen />} />
-                <Route path='/admin/products' element={<ProductsBasePage />} />
+                <Route path='/admin/products' element={<ProductsAdminScreen />} />
             </Routes>
         </section>
     )

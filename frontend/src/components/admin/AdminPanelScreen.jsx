@@ -27,7 +27,6 @@ export const AdminScreen = () => {
             <Row className="mt-4">
                 <Col>
                     <Button variant="primary" size="lg" onClick={navigateToPatterns}>
-
                         Patterns
                     </Button>
                 </Col>
@@ -35,7 +34,14 @@ export const AdminScreen = () => {
             <Row className="mt-4">
                 <Col>
                     <Button variant="primary" size="lg" onClick={navigateToUsers}>
-                                              Users
+                        Users
+                    </Button>
+                </Col>
+            </Row>
+            <Row className="mt-4">
+                <Col>
+                    <Button variant="primary" size="lg" onClick={navigateToProducts}>
+                        Products
                     </Button>
                 </Col>
             </Row>
