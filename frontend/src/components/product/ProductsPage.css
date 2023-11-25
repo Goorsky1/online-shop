@@ -88,6 +88,10 @@
     margin: 0;
 }
 
+.css-wanzkd-MuiStack-root {
+    margin-top: 0px;
+}
+
 .MuiPagination-ul {
     justify-content: center;
 }
@@ -108,4 +112,45 @@
 .cart-btn {
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+.product-controls {
+    display: flex;
+    width: 100%;
+    margin: auto;
+    flex-direction: row;
+    align-items: stretch;
+    margin-top: 1rem;
+}
+
+.sorters {
+    flex: 1;
+}
+
+.select-controls {
+    display: flex;
+    padding: 1rem;
+}
+
+.filters {
+    flex: 2;
+}
+
+.filter-controls {
+    display: flex;
+    padding: 1rem;
+}
+
+.filter-controls .MuiAutocomplete-root {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.search {
+    flex: 1;
+}
+
+.search-controls {
+    display: flex;
+    padding: 1rem;
 }
