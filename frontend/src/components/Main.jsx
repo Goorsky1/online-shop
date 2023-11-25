@@ -36,21 +36,49 @@ function Cart() {
         }
         console.log("productsInCart: ", productsInCart)
     }
+
+    const onQuantityChange = (productId, count) => {
+        setProductsInCart((oldState) => {
+            const productsIndex = oldState.findIndex(
+                (item) =>
+                    item.product_id === productId
+            );
+            if (productsIndex !== -1) {
+                oldState[productsIndex].count = count;
+            }
+            return [...oldState];
+        });
+    };
+
+    const onProductRemove = (product) => {
+        setProductsInCart((oldState) => {
+            const productsIndex = oldState.findIndex(
+                (item) =>
+                    item.product_id === product.product_id
+            );
+            if (productsIndex !== -1) {
+                oldState.splice(productsIndex, 1);
+            }
+            return [...oldState];
+        });
+    }
     return {
         productsInCart,
-        addProductToCart
+        addProductToCart,
+        onQuantityChange,
+        onProductRemove
     }
 }
 
 export function Main() {
-    const {productsInCart, addProductToCart} = Cart();
+    const {productsInCart, addProductToCart, onQuantityChange, onProductRemove} = Cart();
 
     return (
         <div className='Main'>
             <Header/>
             <Refresh/>
             <div className='content'>
-                <Router productsInCart={productsInCart} addProductToCart={addProductToCart}/>
+                <Router productsInCart={productsInCart} addProductToCart={addProductToCart} onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}/>
             </div>
             {/*<ShoppingCart productsInCart={productsInCart}/>*/}
         </div>

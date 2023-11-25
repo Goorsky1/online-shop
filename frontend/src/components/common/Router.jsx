@@ -8,7 +8,7 @@ import {ProfileEdit} from "../user/ProfileEdit";
 import ShoppingCart from "./ShoppingCart";
 
 export function Router(props) {
-    const {productsInCart, addProductToCart} = props
+    const {productsInCart, addProductToCart, onQuantityChange, onProductRemove} = props
     console.log("router productsInCart: ", productsInCart)
 
     return (
@@ -19,7 +19,7 @@ export function Router(props) {
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/edit" element={<ProfileEdit />} />
-                <Route path="/cart" element={<ShoppingCart productsInCart={productsInCart}/>} />
+                <Route path="/cart" element={<ShoppingCart productsInCart={productsInCart} onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}/>} />
                 <Route path='/products/*' element={<ProductsBasePage productsInCart={productsInCart}
                                                                      addProductToCart={addProductToCart}/>} />
             </Routes>
