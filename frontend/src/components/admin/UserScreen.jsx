@@ -18,6 +18,7 @@ const UserItem = ({ user, onDelete, onEdit }) => {
 export const AdminUsersScreen = () => {
     const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentUser, setCurrentUser] = useState({
         user_email: '',
@@ -46,13 +47,23 @@ export const AdminUsersScreen = () => {
         }
     };
 
-    const handleDelete = async (userId) => {
+    const handleDelete = (userId) => {
+        setCurrentUser(users.find(user => user.user_id === userId));
+        setShowDeleteModal(true);
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
+    };
+
+    const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`/api/users/${userId}`);
+            await axios.patch(`/api/users/${currentUser.user_id}`, { "user_status": "deleted" });
             fetchUsers();
-        } catch (err) {
-            setError(err.message);
+        } catch (error) {
+            console.error('Error deleting account:', error);
         }
+        setShowDeleteModal(false);
     };
 
     const handleEdit = (user) => {
@@ -151,6 +162,18 @@ export const AdminUsersScreen = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>Zamknij</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showDeleteModal} onHide={handleCancelDelete}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to delete this account? This action cannot be undone.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="light" onClick={handleCancelDelete}>Cancel</Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>Delete Account</Button>
                 </Modal.Footer>
             </Modal>
         </>
