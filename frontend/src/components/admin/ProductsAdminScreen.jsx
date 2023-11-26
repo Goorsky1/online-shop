@@ -6,10 +6,12 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
     return (
         <div className={`border rounded p-3 mb-4`}>
             <h2>{product.product_name}</h2>
+            <img src={`data:image/jpg;base64,${product.product_image}`} alt={product.product_name} style={{ maxWidth: '50px', maxHeight: '50px' }} />
             <p>{product.product_count}</p>
             <Button variant="primary" onClick={() => onEdit(product)}>Edit</Button>
             <Button variant="secondary" onClick={() => onShowChangeQuantity(product)}>Change Quantity</Button>
             <Button variant="danger" onClick={() => onDelete(product.product_id)}>Delete</Button>
+
         </div>
     );
 };
@@ -93,6 +95,7 @@ export const ProductsAdminScreen = () => {
             product_count: productCount,
             product_price: productPrice,
             product_description: productDescription,
+            product_image: productImage,
         };
 
         try {
@@ -118,7 +121,17 @@ export const ProductsAdminScreen = () => {
             setError(err.message);
         }
     };
+    const handleImageClick = () => {
+        document.getElementById('image-file').click();
+    };
 
+    const handleImageChange = e => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setProductImage(reader.result.split(',')[1]);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
     const handleDelete = async (productId) => {
         const confirmDelete = window.confirm("Czy na pewno chcesz usunąć ten produkt?");
         if (confirmDelete) {
@@ -157,7 +170,7 @@ export const ProductsAdminScreen = () => {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Nazwa Produktu</Form.Label>
+                            <Form.Label>Product name</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={patternName}
@@ -166,7 +179,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Cena Produktu</Form.Label>
+                            <Form.Label>Price</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={productPrice}
@@ -174,7 +187,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Kolor Produktu</Form.Label>
+                            <Form.Label>Product color</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={productColor}
@@ -182,7 +195,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Materiał Produktu</Form.Label>
+                            <Form.Label>Material</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={productMaterial}
@@ -190,7 +203,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Średnica Produktu</Form.Label>
+                            <Form.Label>Product diameter</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={productDiameter}
@@ -198,7 +211,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Szerokość Produktu</Form.Label>
+                            <Form.Label>Product width</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={productWidth}
@@ -206,7 +219,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Opis Produktu</Form.Label>
+                            <Form.Label>Description</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
@@ -214,23 +227,35 @@ export const ProductsAdminScreen = () => {
                                 onChange={(e) => setProductDescription(e.target.value)}
                             />
                         </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Product Image</Form.Label>
+                            <img src={`data:image/jpg;base64,${productImage}`} alt='Product Image' onClick={handleImageClick} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                            <input
+                                type='file'
+                                id='image-file'
+                                name='image'
+                                accept='image/*'
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                            />
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>Zamknij</Button>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
                     <Button variant="primary" type="submit" onClick={handleSubmit}>
-                        {isEditMode ? 'Zaktualizuj' : 'Dodaj'}
+                        {isEditMode ? 'Update' : 'Add'}
                     </Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showQuantityModal} onHide={() => setShowQuantityModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Zmień ilość produktu</Modal.Title>
+                    <Modal.Title>Change quantity</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label>Obecna ilość</Form.Label>
+                            <Form.Label>Current quantity</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={currentQuantity}
@@ -239,7 +264,7 @@ export const ProductsAdminScreen = () => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Nowa ilość</Form.Label>
+                            <Form.Label>New quantity</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={newQuantity}
@@ -250,8 +275,8 @@ export const ProductsAdminScreen = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowQuantityModal(false)}>Anuluj</Button>
-                    <Button variant="primary" onClick={() => handleUpdateQuantity(newQuantity)}>Zaktualizuj ilość</Button>
+                    <Button variant="secondary" onClick={() => setShowQuantityModal(false)}>Cancel</Button>
+                    <Button variant="primary" onClick={() => handleUpdateQuantity(newQuantity)}>Update quantity</Button>
                 </Modal.Footer>
             </Modal>
 

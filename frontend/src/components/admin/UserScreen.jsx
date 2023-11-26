@@ -7,8 +7,8 @@ const UserItem = ({ user, onDelete, onEdit }) => {
         <div className="border rounded p-3 mb-4">
             <h2>Email: {user.user_email}</h2>
             <p>Status: {user.user_status}</p>
-            <p>Telefon: {user.user_phone}</p>
-            <p>Uprawnienia: {user.user_permissions}</p>
+            <p>Phone: {user.user_phone}</p>
+            <p>Permissions: {user.user_permissions}</p>
             <Button variant="primary" onClick={() => onEdit(user)}>Edytuj</Button>
             <Button variant="danger" onClick={() => onDelete(user.user_id)}>Usuń</Button>
         </div>
@@ -103,7 +103,7 @@ export const AdminUsersScreen = () => {
     return (
         <>
             <Container className="my-5">
-                <Button variant="primary" onClick={() => setShowModal(true)}>Dodaj Użytkownika</Button>
+                <Button variant="primary" onClick={() => setShowModal(true)}>Add user</Button>
                 <Nav className="flex-column">
                     {users.map(user => (
                         <UserItem key={user.user_id} user={user} onDelete={handleDelete} onEdit={handleEdit}/>
@@ -113,7 +113,7 @@ export const AdminUsersScreen = () => {
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{isEditMode ? 'Edytuj Użytkownika' : 'Dodaj Użytkownika'}</Modal.Title>
+                    <Modal.Title>{isEditMode ? 'Update user' : 'Add user'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
