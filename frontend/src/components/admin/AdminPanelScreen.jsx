@@ -21,7 +21,7 @@ export const AdminScreen = () => {
         <Container fluid className="admin-panel">
             <Row>
                 <Col>
-                    <h2>Panel administratora</h2>
+                    <h2>Admin panel</h2>
                 </Col>
             </Row>
             <Row className="mt-4">

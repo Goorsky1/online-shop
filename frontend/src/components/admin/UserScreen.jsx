@@ -7,10 +7,10 @@ const UserItem = ({ user, onDelete, onEdit }) => {
         <div className="border rounded p-3 mb-4">
             <h2>Email: {user.user_email}</h2>
             <p>Status: {user.user_status}</p>
-            <p>Telefon: {user.user_phone}</p>
-            <p>Uprawnienia: {user.user_permissions}</p>
-            <Button variant="primary" onClick={() => onEdit(user)}>Edytuj</Button>
-            <Button variant="danger" onClick={() => onDelete(user.user_id)}>Usuń</Button>
+            <p>Phone: {user.user_phone}</p>
+            <p>Permissions: {user.user_permissions}</p>
+            <Button variant="primary" onClick={() => onEdit(user)}>Update</Button>
+            <Button variant="danger" onClick={() => onDelete(user.user_id)}>Delete</Button>
         </div>
     );
 };
@@ -81,6 +81,10 @@ export const AdminUsersScreen = () => {
             user_status: 'active',
             user_permissions: currentUser.user_permissions
         };
+        if (currentUser.user_password) {
+            userPayload.user_password = currentUser.user_password;
+        }
+
         try {
             if (isEditMode) {
                 await axios.patch(`/api/users/${currentUser.user_id}`, userPayload);
@@ -89,7 +93,7 @@ export const AdminUsersScreen = () => {
             }
             setShowModal(false);
             setIsEditMode(false);
-            setCurrentUser({user_email: '', user_password: '', user_phone: '', user_permissions: ''});
+            setCurrentUser({ user_email: '', user_password: '', user_phone: '', user_permissions: '' });
             fetchUsers();
         } catch (err) {
             setError(err.message);
@@ -103,7 +107,7 @@ export const AdminUsersScreen = () => {
     return (
         <>
             <Container className="my-5">
-                <Button variant="primary" onClick={() => setShowModal(true)}>Dodaj Użytkownika</Button>
+                <Button variant="primary" onClick={() => setShowModal(true)}>Add user</Button>
                 <Nav className="flex-column">
                     {users.map(user => (
                         <UserItem key={user.user_id} user={user} onDelete={handleDelete} onEdit={handleEdit}/>
@@ -113,7 +117,7 @@ export const AdminUsersScreen = () => {
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{isEditMode ? 'Edytuj Użytkownika' : 'Dodaj Użytkownika'}</Modal.Title>
+                    <Modal.Title>{isEditMode ? 'Update user' : 'Add user'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
@@ -133,9 +137,10 @@ export const AdminUsersScreen = () => {
                             <Form.Control
                                 type="password"
                                 name="user_password"
-                                value={currentUser.user_password}
+                                value={currentUser.user_password || ''}
                                 onChange={handleChange}
-                                required
+                                required={!isEditMode} // Make it required only when not in edit mode
+                                placeholder={isEditMode ? "Enter new password (optional)" : "Enter password"}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
@@ -157,11 +162,11 @@ export const AdminUsersScreen = () => {
                                 required
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit">Zapisz</Button>
+                        <Button variant="primary" type="submit">Save</Button>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>Zamknij</Button>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showDeleteModal} onHide={handleCancelDelete}>
