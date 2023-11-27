@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import createApiClient from '../../utils/apiClient';
 import { getUserData } from '../../utils/userSession';
 import './styleUserPanel.css';
+import axios from 'axios';
 
 export function ProfileEdit() {
     const successMessage = 'Profile updated successfully!'
@@ -20,7 +20,6 @@ export function ProfileEdit() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const user = getUserData();
-        const apiClient = createApiClient();
 
         if (newPassword !== confirmPassword) {
             setMessage('Passwords do not match. Please check and try again.');
@@ -40,8 +39,8 @@ export function ProfileEdit() {
             if (newPassword !== "") {
                 requestData.user_password = newPassword;
             }
-            console.log("requestData:",requestData)
-            const response = await apiClient.patch(`/api/users/${user.user.user_id}`, requestData);
+            console.log("requestData:", requestData)
+            const response = await axios.patch(`/api/users/${user.user.user_id}`, requestData);
             setMessage(successMessage);
         } catch (error) {
             setMessage('Error updating profile. Please try again.');
@@ -52,9 +51,9 @@ export function ProfileEdit() {
 
     return (
         <div className="container mt-4">
-            <div className="space"/>
+            <div className="space" />
             <h1>Edit Profile</h1>
-            <hr/>
+            <hr />
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="newPhone" className="form-label">Phone:</label>
@@ -89,10 +88,10 @@ export function ProfileEdit() {
                 </div>
                 <p className="text-warning"><i>Leave empty to leave unchanged</i></p>
                 <div className={"mb-3 text-danger"}>{message}</div>
-                <div className="space"/>
+                <div className="space" />
                 <button type="submit" className="btn btn-primary">Save Changes</button>
-                <hr/>
-                <div className="space"/>
+                <hr />
+                <div className="space" />
             </form>
         </div>
     );

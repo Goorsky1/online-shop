@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Row, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import createApiClient from '../../utils/apiClient';
 import { setUserData } from '../../utils/userSession';
 import './styleUserPanel.css';
+import axios from 'axios';
 
 export function Login() {
     const navigate = useNavigate();
@@ -15,8 +15,7 @@ export function Login() {
         event.preventDefault();
         try {
             console.log('Request Payload:', { user_email: email, user_password: password });
-            const apiClient = createApiClient();
-            const response = await apiClient.post('api/auth/login', {
+            const response = await axios.post('api/auth/login', {
                 user_email: email,
                 user_password: password,
             });
@@ -60,7 +59,7 @@ export function Login() {
                                 required
                             />
                         </Form.Group>
-                        <div className="mt-4"/>
+                        <div className="mt-4" />
                         <button type="submit" className="btn btn-primary login-button">Log In</button>
                     </Form>
                 </Row>

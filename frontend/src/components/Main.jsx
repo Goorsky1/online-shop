@@ -1,21 +1,36 @@
-import {Header} from './common/Header.jsx'
+import { useLocation } from 'react-router-dom'
+import { getUserData, setUserData } from '../utils/userSession.jsx'
+import { Header } from './common/Header.jsx'
 import Refresh from './common/Refresh.jsx'
-import {Router} from './common/Router.jsx'
-import {useEffect, useState} from 'react'
+import { Router } from './common/Router.jsx'
+import { useEffect, useState } from 'react'
+import initApiClient from '../utils/apiClient.jsx'
 
 function Cart() {
+    const [cartKey, setCartKey] = useState('shopping-cart-guest')
+    const [userId, setUserId] = useState(0)
     const [showCartSuccessToast, setShowCartSuccessToast] = useState(false);
     const [showCartWarningToast, setShowCartWarningToast] = useState(false);
-    const [productsInCart, setProductsInCart] =
-        useState(
-            JSON.parse(
-                localStorage.getItem(
-                    "shopping-cart"
-                )
-            ) || []
-        );
+    const location = useLocation()
+    const [productsInCart, setProductsInCart] = useState([]);
+    console.log(cartKey)
     useEffect(() => {
-        localStorage.setItem("shopping-cart", JSON.stringify(productsInCart));
+        const userData = getUserData()
+        if (userData) {
+            setUserId(userData.user.user_id)
+        } else {
+            setUserId(0)
+        }
+        setCartKey(`shopping-cart-${userId}`)
+    }, [location]);
+
+    useEffect(() => {
+        localStorage.setItem(cartKey, JSON.stringify(JSON.parse(localStorage.getItem(cartKey)) || []));
+        setProductsInCart(JSON.parse(localStorage.getItem(cartKey)) || []);
+    }, [cartKey]);
+
+    useEffect(() => {
+        localStorage.setItem(cartKey, JSON.stringify(productsInCart));
     }, [productsInCart]);
 
     const addProductToCart = (product) => {
@@ -23,8 +38,8 @@ function Cart() {
         if (alreadyInCart) {
             const latestCartUpdate = productsInCart.map(item =>
                 item.product_id === product.product_id ? {
-                        ...item, count: item.count + 1
-                    }
+                    ...item, count: item.count + 1
+                }
                     : item
             );
             setProductsInCart(latestCartUpdate);
@@ -41,7 +56,6 @@ function Cart() {
             setShowCartSuccessToast(false);
             setShowCartWarningToast(false);
         }, 3000);
-        // console.log("productsInCart: ", productsInCart)
     }
 
     const onQuantityChange = (productId, count) => {
@@ -87,15 +101,17 @@ export function Main() {
         setShowCartSuccessToast, showCartWarningToast, setShowCartWarningToast
     } = Cart();
 
+    initApiClient()
+
     return (
         <div className='Main'>
-            <Header/>
-            <Refresh/>
+            <Header />
+            <Refresh />
             <div className='content'>
                 <Router productsInCart={productsInCart} addProductToCart={addProductToCart}
-                        onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}
-                        showCartSuccessToast={showCartSuccessToast} setShowCartSuccessToast={setShowCartSuccessToast}
-                        showCartWarningToast={showCartWarningToast} setShowCartWarningToast={setShowCartWarningToast}/>
+                    onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}
+                    showCartSuccessToast={showCartSuccessToast} setShowCartSuccessToast={setShowCartSuccessToast}
+                    showCartWarningToast={showCartWarningToast} setShowCartWarningToast={setShowCartWarningToast} />
             </div>
             {/*<ShoppingCart productsInCart={productsInCart}/>*/}
         </div>
