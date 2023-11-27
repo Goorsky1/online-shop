@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { getUserData } from './userSession'
 
-const createApiClient = () => {
+const initApiClient = () => {
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers.post['Content-Type'] = 'application/json';
   const user = getUserData()
@@ -12,4 +12,4 @@ const createApiClient = () => {
   return axios.create()
 };
 
-export default createApiClient;
+export default initApiClient;
