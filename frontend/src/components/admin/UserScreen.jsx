@@ -139,7 +139,7 @@ export const AdminUsersScreen = () => {
                                 name="user_password"
                                 value={currentUser.user_password || ''}
                                 onChange={handleChange}
-                                required={!isEditMode} // Make it required only when not in edit mode
+                                required={!isEditMode}
                                 placeholder={isEditMode ? "Enter new password (optional)" : "Enter password"}
                             />
                         </Form.Group>

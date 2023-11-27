@@ -3,18 +3,16 @@ import { Container, Nav, Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-const Pattern = ({ pattern, onDelete, onEdit }) => {
+const Pattern = ({ pattern, onEdit }) => {
     const navigate = useNavigate();
     return (
         <div className={`border rounded p-3 mb-4`}>
             <h2>{pattern.pattern_name}</h2>
             <p>{pattern.pattern_theme}</p>
-            <Button className="mx-2" variant="primary" onClick={() => onEdit(pattern)}> {/* Adjusted the URL */}
+            <Button className="mx-2" variant="primary" onClick={() => onEdit(pattern)}>
                 Edytuj
             </Button>
-            <Button variant="danger" onClick={() => onDelete(pattern.pattern_id)}>
-                Usuń
-            </Button>
+
         </div>
     );
 };
@@ -23,7 +21,7 @@ export const AdminPatternsScreen = () => {
     const [patterns, setPatterns] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [patternName, setPatternName] = useState('');
-    const [patternTheme, setPatternTheme] = useState(''); // Declare patternTheme state
+    const [patternTheme, setPatternTheme] = useState('');
     const [error, setError] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentPatternId, setCurrentPatternId] = useState(null);
@@ -84,10 +82,10 @@ export const AdminPatternsScreen = () => {
     return (
         <>
             <Container className="my-5">
-                <Button variant="primary" type="submit" onClick={() => setShowModal(true)}>Patterns</Button>
+                <Button variant="primary" type="submit" onClick={() => setShowModal(true)}>Add patterns</Button>
                 <Nav className="flex-column">
                     {patterns.map((pattern) => (
-                        <Pattern key={pattern.pattern_id} pattern={pattern} onDelete={handleDelete} onEdit={handleEdit}/>
+                        <Pattern key={pattern.pattern_id} pattern={pattern} onEdit={handleEdit}/>
                     ))}
                 </Nav>
             </Container>

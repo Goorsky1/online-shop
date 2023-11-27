@@ -133,7 +133,7 @@ export const ProductsAdminScreen = () => {
         reader.readAsDataURL(e.target.files[0]);
     };
     const handleDelete = async (productId) => {
-        const confirmDelete = window.confirm("Czy na pewno chcesz usunąć ten produkt?");
+        const confirmDelete = window.confirm("Are you sure you want to delete this account? This action cannot be undone.");
         if (confirmDelete) {
             try {
                 await axios.delete(`/api/products/${productId}`);
@@ -147,7 +147,7 @@ export const ProductsAdminScreen = () => {
     return (
         <>
             <Container className="my-5">
-                <Button variant="primary" onClick={() => setShowModal(true)}>Dodaj Produkt</Button>
+                <Button variant="primary" onClick={() => setShowModal(true)}>Add products</Button>
                 <Nav className="flex-column">
                     {products.map((product) => (
                         <Product
@@ -165,7 +165,7 @@ export const ProductsAdminScreen = () => {
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{isEditMode ? 'Edytuj Produkt' : 'Dodaj Produkt'}</Modal.Title>
+                    <Modal.Title>{isEditMode ? 'Edit product' : 'Add product'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
