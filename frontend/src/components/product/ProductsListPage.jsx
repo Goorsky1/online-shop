@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import createApiClient from '../../utils/apiClient';
 import { ProductCard } from './ProductCard';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -10,9 +9,10 @@ import './ProductsPage.css';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import axios from 'axios';
 
 export function ProductsListPage(props) {
-    const {productsInCart, addProductToCart} = props;
+    const { productsInCart, addProductToCart } = props;
     const [products, setProducts] = useState([]);
     const [currentProducts, setCurrentProducts] = useState([]);
     const [page, setPage] = useState(1);
@@ -27,16 +27,15 @@ export function ProductsListPage(props) {
     const [possiblePatternThemes, setPossiblePatternThemes] = useState([]);
     const [searchText, setSearchText] = useState('');
     const navigate = useNavigate();
-    const apiClient = createApiClient();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiClient.get('/api/products');
+                const response = await axios.get('/api/products');
                 const filteredProducts = response.data.data.products.filter((product) => product.product_count !== 0);
 
                 const patternRequests = filteredProducts.map((product) =>
-                    apiClient.get(`/api/patterns/${product.pattern_id}`)
+                    axios.get(`/api/patterns/${product.pattern_id}`)
                 );
 
                 const patternsData = await Promise.all(patternRequests);

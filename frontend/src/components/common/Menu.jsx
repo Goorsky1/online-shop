@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import { getUserData, removeUserData } from '../../utils/userSession'
 import "./menuCss.css"
-import createApiClient from '../../utils/apiClient'
 import React, { useState, useLayoutEffect, useEffect } from 'react'
+import axios from 'axios';
 
 export function Menu() {
     const navigate = useNavigate();
@@ -19,6 +19,7 @@ export function Menu() {
         menuItems.push({
             name: 'Log Out', path: '/', onClickFunc: () => {
                 removeUserData()
+                delete axios.defaults.headers.common.Authorization
                 navigate('/')
             }
         })
