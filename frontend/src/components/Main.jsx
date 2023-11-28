@@ -13,7 +13,6 @@ function Cart() {
     const [showCartWarningToast, setShowCartWarningToast] = useState(false);
     const location = useLocation()
     const [productsInCart, setProductsInCart] = useState([]);
-    console.log(cartKey)
     useEffect(() => {
         const userData = getUserData()
         if (userData) {
@@ -83,6 +82,10 @@ function Cart() {
             return [...oldState];
         });
     }
+
+    const clearCart = () => {
+        setProductsInCart([]);
+    }
     return {
         productsInCart,
         addProductToCart,
@@ -91,14 +94,15 @@ function Cart() {
         showCartSuccessToast,
         setShowCartSuccessToast,
         showCartWarningToast,
-        setShowCartWarningToast
+        setShowCartWarningToast,
+        clearCart
     }
 }
 
 export function Main() {
     const {
         productsInCart, addProductToCart, onQuantityChange, onProductRemove, showCartSuccessToast,
-        setShowCartSuccessToast, showCartWarningToast, setShowCartWarningToast
+        setShowCartSuccessToast, showCartWarningToast, setShowCartWarningToast, clearCart
     } = Cart();
 
     initApiClient()
@@ -111,9 +115,8 @@ export function Main() {
                 <Router productsInCart={productsInCart} addProductToCart={addProductToCart}
                     onQuantityChange={onQuantityChange} onProductRemove={onProductRemove}
                     showCartSuccessToast={showCartSuccessToast} setShowCartSuccessToast={setShowCartSuccessToast}
-                    showCartWarningToast={showCartWarningToast} setShowCartWarningToast={setShowCartWarningToast} />
+                    showCartWarningToast={showCartWarningToast} setShowCartWarningToast={setShowCartWarningToast} clearCart={clearCart} />
             </div>
-            {/*<ShoppingCart productsInCart={productsInCart}/>*/}
         </div>
     )
 }

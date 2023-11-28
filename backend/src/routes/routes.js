@@ -54,6 +54,7 @@ router.delete('/users/:id', authenticate, authorizeClientOrWorker, userControlle
 // PRODUCTS
 router.get('/products', productController.getAllProducts.bind(productController));
 router.post('/products', authenticate, authorizeWorker, validator(productSchemas.addProduct), productController.addProduct.bind(productController));
+router.post('/products/checkout', authenticate, authorizeClientOrWorker, validator(productSchemas.processCheckout), productController.processCheckout.bind(productController));
 
 router.get('/products/:id', productController.getProductById.bind(productController));
 router.patch('/products/:id', authenticate, authorizeWorker, validator(productSchemas.modifyProduct), productController.modifyProduct.bind(productController));

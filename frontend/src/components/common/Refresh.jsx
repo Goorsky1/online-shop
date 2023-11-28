@@ -38,10 +38,6 @@ const Refresh = () => {
 
     useEffect(() => {
         handleRefresh()
-        const user = refreshResponse
-        if (user) {
-            console.log(user.user.user_id)
-        }
     }, [location]);
 
     return (

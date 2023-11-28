@@ -22,7 +22,8 @@ export function Router(props) {
         setShowCartWarningToast,
         setShowCartSuccessToast,
         showCartWarningToast,
-        showCartSuccessToast
+        showCartSuccessToast,
+        clearCart
     } = props
 
     return (
@@ -35,7 +36,7 @@ export function Router(props) {
                 <Route path="/profile/edit" element={<ProfileEdit />} />
                 <Route path="/cart"
                     element={<ShoppingCart productsInCart={productsInCart} onQuantityChange={onQuantityChange}
-                        onProductRemove={onProductRemove} />} />
+                        onProductRemove={onProductRemove} clearCart={clearCart} />} />
                 <Route path='/products/*' element={<ProductsBasePage productsInCart={productsInCart}
                     addProductToCart={addProductToCart}
                     setShowCartWarningToast={setShowCartWarningToast}
