@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Nav, Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
+import './ProductAdminCss.css'
 
 const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
     return (
         <div className={`border rounded p-3 mb-4`}>
-            <h2>{product.product_name}</h2>
-            <img src={`data:image/jpg;base64,${product.product_image}`} alt={product.product_name} style={{ maxWidth: '50px', maxHeight: '50px' }} />
-            <p>{product.product_count}</p>
-            <Button variant="primary" onClick={() => onEdit(product)}>Edit</Button>
-            <Button variant="secondary" onClick={() => onShowChangeQuantity(product)}>Change Quantity</Button>
-            <Button variant="danger" onClick={() => onDelete(product.product_id)}>Delete</Button>
+            <div className='adminProdFlex'>
+                <div className='textWrapper'>
+                    <h2>{product.product_name}</h2>
+                    <h3>Quantity</h3>
+                    {product.product_count}
+                    <h3>Price</h3>
+                    {product.product_price} €
 
+                </div>
+                <div className='adminImgWrapper'>
+                    <img src={`data:image/jpg;base64,${product.product_image}`} alt={product.product_name} style={{ width: '300px', height: '150px' }} />
+                </div>
+            </div>
+            <div className='buttons text-center'>
+                <Button variant="primary" onClick={() => onEdit(product)}>Edit</Button>
+                <Button variant="secondary" onClick={() => onShowChangeQuantity(product)}>Change Quantity</Button>
+                <Button variant="danger" onClick={() => onDelete(product.product_id)}>Delete</Button>
+            </div>
         </div>
     );
 };

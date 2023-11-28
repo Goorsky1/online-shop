@@ -1,0 +1,18 @@
+.adminProdFlex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.textWrapper {
+    width: calc(50% - 10px);
+    text-align: center;
+}
+
+.adminImgWrapper {
+    flex-shrink: 0;
+}
+
+.buttons {
+    margin-top: 10px;
+    text-align: center;
+}
