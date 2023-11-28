@@ -4,7 +4,7 @@ const logger = require('./src/middleware/logger.js');
 const app = express();
 
 const port = 3000;
-app.use(express.json())
+app.use(express.json({ limit: '150mb' }));
 app.use(cors());
 app.use(logger)
 
@@ -13,4 +13,4 @@ app.use('/api', routes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-});
+}); 

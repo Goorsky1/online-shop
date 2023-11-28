@@ -1,7 +1,8 @@
-import React from 'react';
-import {RiDeleteBin6Line} from 'react-icons/ri';
-import {useNavigate} from 'react-router-dom';
-import {Button} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
+import axios from 'axios'
 import './ShoppingCart.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,13 +20,40 @@ function mapAvailability(cnt) {
 }
 
 export function ShoppingCart(props) {
-    const {productsInCart, onQuantityChange, onProductRemove} = props;
+    const { productsInCart, onQuantityChange, onProductRemove, clearCart } = props;
     const navigate = useNavigate()
 
     const totalCost = productsInCart.reduce(
         (total, product) => total + product.product_price * product.count,
         0
     ).toFixed(2);
+
+
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleCheckout = async () => {
+        try {
+            console.log(productsInCart)
+            const response = await axios.post('/api/products/checkout', {
+                "products_in_cart": productsInCart,
+            });
+
+            setShowSuccessModal(true);
+
+            clearCart()
+        } catch (error) {
+            setShowErrorModal(true);
+            setErrorMessage(error.response?.data?.error.message || 'An error occurred');
+        }
+    };
+
+    const handleCloseModals = () => {
+        setShowSuccessModal(false);
+        setShowErrorModal(false);
+    };
+
 
     return (
         <div>
@@ -39,13 +67,13 @@ export function ShoppingCart(props) {
                             src={`data:image/jpeg;base64,${product.product_image}`}
                             alt={product.product_name}
                             onClick={() => {
-                                navigate(`/products/details`, {state: {product}});
+                                navigate(`/products/details`, { state: { product } });
                             }}
                         />
                         <div className="cart-product-info" key={product.product_id}>
                             <div className="product-details-cart">
                                 <div className="product-name" onClick={() => {
-                                    navigate(`/products/details`, {state: {product}});
+                                    navigate(`/products/details`, { state: { product } });
                                 }}>
                                     <h2>{product.product_name}</h2>
                                 </div>
@@ -81,7 +109,7 @@ export function ShoppingCart(props) {
                                         className="btn remove-btn"
                                         onClick={() => onProductRemove(product)}
                                     >
-                                        <RiDeleteBin6Line size={20}/>
+                                        <RiDeleteBin6Line size={20} />
                                     </button>
                                 </div>
                             </div>
@@ -95,13 +123,45 @@ export function ShoppingCart(props) {
                             <h3>Total Cost</h3>
                             {totalCost}€
                         </div>
-                        <hr className="mb-3"/>
-                        <button type="submit" className="btn btn-primary checkout-button">
+                        <hr className="mb-3" />
+
+                        <button
+                            type="button"
+                            className="btn btn-primary checkout-button"
+                            onClick={handleCheckout}
+                        >
                             Proceed to checkout
                         </button>
                     </>
-                     : <hr/>
+                    : <hr />
                 }
+                <Modal show={showSuccessModal} onHide={handleCloseModals}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Checkout Success</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Your order has been successfully placed!</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleCloseModals}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showErrorModal} onHide={handleCloseModals}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Error</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>{errorMessage}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleCloseModals}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </div>
     );

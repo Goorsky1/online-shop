@@ -100,6 +100,40 @@ class ProductController {
             return res.status(500).json(formatError(`Error updating product, ${err}`));
         }
     }
+
+    async processCheckout(req, res) {
+        const productsInCart = req.body.products_in_cart;
+
+        const updatedProducts = [];
+        try {
+            for (const cartProduct of productsInCart) {
+                const product = await this.productRepository.getProductById(cartProduct.product_id);
+
+                if (!product) {
+                    return res.status(404).json(formatError(`Product with id ${cartProduct.product_id} not found`));
+                }
+
+                if (product.product_count < cartProduct.count) {
+                    return res.status(400).json(formatError(`Insufficient stock for ${cartProduct.product_name}`));
+                }
+
+
+                let updatedProduct = product;
+                updatedProduct.product_count = product.product_count - cartProduct.count
+
+
+                updatedProducts.push(updatedProduct);
+            }
+
+            for (const updatedProduct of updatedProducts) {
+                await this.productRepository.modifyProduct(updatedProduct.product_id, updatedProduct);
+            }
+
+            return res.status(200).json(formatResponse({ message: 'Checkout successful' }));
+        } catch (err) {
+            return res.status(500).json(formatError(`Error processing checkout, ${err}`));
+        }
+    }
 }
 
 module.exports = { ProductController };

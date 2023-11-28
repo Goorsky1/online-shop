@@ -26,6 +26,10 @@ const productSchemas = {
         product_description: Joi.string().optional(),
         product_image: Joi.string().optional(),
     }).min(1),
+
+    processCheckout: Joi.object().keys({
+        products_in_cart: Joi.array().required(),
+    }).min(1),
 };
 
 module.exports = { productSchemas };
