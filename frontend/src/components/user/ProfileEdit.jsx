@@ -42,11 +42,10 @@ export function ProfileEdit() {
             console.log("requestData:", requestData)
             const response = await axios.patch(`/api/users/${user.user.user_id}`, requestData);
             setMessage(successMessage);
+            navigate('/profile')
         } catch (error) {
-            setMessage('Error updating profile. Please try again.');
-            console.error('Error updating profile:', error);
+            setMessage(`Error updating profile: ${error.response.data.error.message}`);
         }
-        navigate('/profile')
     };
 
     return (
