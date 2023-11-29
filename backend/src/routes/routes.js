@@ -61,8 +61,8 @@ router.patch('/products/:id', authenticate, authorizeWorker, validator(productSc
 router.delete('/products/:id', authenticate, authorizeWorker, productController.deleteProductById.bind(productController));
 
 router.get('/products/:id/ratings', ratingController.getAllRatingsByProductId.bind(ratingController));
-router.post('/products/:id/ratings', authenticate, authorizeClient, validator(ratingSchemas.addRating), ratingController.addRating.bind(ratingController));
-router.patch('/products/:id/ratings', authenticate, authorizeClient, validator(ratingSchemas.modifyRating), ratingController.modifyRating.bind(ratingController));
+router.post('/products/:id/ratings', authenticate, authorizeClientOrWorker, validator(ratingSchemas.addRating), ratingController.addRating.bind(ratingController));
+router.patch('/products/:id/ratings', authenticate, authorizeClientOrWorker, validator(ratingSchemas.modifyRating), ratingController.modifyRating.bind(ratingController));
 
 router.get('/products/:idp/ratings/:idu', ratingController.getRatingByUserIdAndProductId.bind(ratingController));
 router.delete('/products/:idp/ratings/:idu', authenticate, authorizeClientOrWorker, ratingController.deleteRating.bind(ratingController));

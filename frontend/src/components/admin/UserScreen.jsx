@@ -29,6 +29,17 @@ export const AdminUsersScreen = () => {
     });
     const [error, setError] = useState('');
 
+    function handleModalClose() {
+        setCurrentUser({
+            user_email: '',
+            user_password: '',
+            user_phone: '',
+            user_status: '',
+            user_permissions: ''
+        })
+        setError('')
+    }
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -42,7 +53,7 @@ export const AdminUsersScreen = () => {
                 setError('Received unexpected data format from the server');
 
         } catch (err) {
-            setError(err.message);
+            setError(err.response.data.error.message);
             setUsers([]);
         }
     };
@@ -96,12 +107,12 @@ export const AdminUsersScreen = () => {
             setCurrentUser({ user_email: '', user_password: '', user_phone: '', user_permissions: '' });
             fetchUsers();
         } catch (err) {
-            setError(err.message);
+            setError(err.response.data.error.message);
         }
     };
 
     const handleChange = (e) => {
-        setCurrentUser({...currentUser, [e.target.name]: e.target.value});
+        setCurrentUser({ ...currentUser, [e.target.name]: e.target.value });
     };
 
     return (
@@ -110,12 +121,15 @@ export const AdminUsersScreen = () => {
                 <Button variant="primary" onClick={() => setShowModal(true)}>Add user</Button>
                 <Nav className="flex-column">
                     {users.map(user => (
-                        <UserItem key={user.user_id} user={user} onDelete={handleDelete} onEdit={handleEdit}/>
+                        <UserItem key={user.user_id} user={user} onDelete={handleDelete} onEdit={handleEdit} />
                     ))}
                 </Nav>
             </Container>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal show={showModal} onHide={() => {
+                setShowModal(false)
+                handleModalClose()
+            }}>
                 <Modal.Header closeButton>
                     <Modal.Title>{isEditMode ? 'Update user' : 'Add user'}</Modal.Title>
                 </Modal.Header>
@@ -166,7 +180,10 @@ export const AdminUsersScreen = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+                    <Button variant="secondary" onClick={() => {
+                        setShowModal(false)
+                        handleModalClose()
+                    }}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showDeleteModal} onHide={handleCancelDelete}>
