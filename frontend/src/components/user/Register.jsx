@@ -22,12 +22,11 @@ export function Register() {
                 user_phone: phone.toString(),
                 user_permissions: 'client'
             };
-            // console.log('Request Payload:', user);
             const response = await axios.post('/api/users', user);
             navigate('/login');
         } catch (error) {
             if (error.response) {
-                setError(error.response.data.message);
+                setError(error.response.data.error.message);
             } else {
                 setError('The request was made but no response was received');
             }
@@ -73,7 +72,7 @@ export function Register() {
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </Form.Group>
-                        <div className="mt-4"/>
+                        <div className="mt-4" />
                         <button type="submit" className="btn btn-primary login-button">Register</button>
                     </Form>
                 </Row>
