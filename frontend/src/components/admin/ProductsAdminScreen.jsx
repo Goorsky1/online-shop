@@ -36,7 +36,7 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
     );
 };
 
-    export const ProductsAdminScreen = () => {
+export const ProductsAdminScreen = () => {
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [patternName, setPatternName] = useState('');
@@ -96,7 +96,8 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
         setProductPrice(product.product_price);
         setProductDescription(product.product_description);
         setCurrentProductId(product.product_id);
-        setSelectedPattern(patterns.find(p => p.id === product.pattern_id));
+        setSelectedPattern(patterns.find(p => p.pattern_id === product.pattern_id));
+        setProductImage(product.product_image)
         setIsEditMode(true);
         setShowModal(true);
     };
@@ -129,7 +130,7 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
             product_diameter: productDiameter,
             product_width: productWidth,
             pattern_id: selectedPattern.pattern_id,
-            product_count: 0,
+            product_count: productCount ? productCount : 0,
             product_price: productPrice,
             product_description: productDescription,
             product_image: productImage,
@@ -159,6 +160,7 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
         setProductDescription('');
         setProductImage('');
         setSelectedPattern(null);
+        setIsEditMode(false)
     };
 
     const handleUpdateQuantity = async () => { // Zmienione
@@ -306,7 +308,7 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => { setShowModal(false); resetFormFields(); }}>Close</Button>
-                    <Button variant="primary" type="submit" onClick={handleSubmit}>
+                    <Button variant="primary" type="submit" onClick={(e) => { handleSubmit(e); resetFormFields() }}>
                         {isEditMode ? 'Update' : 'Add'}
                     </Button>
                 </Modal.Footer>

@@ -36,7 +36,7 @@ export const AdminScreen = () => {
 
             <Row className="mt-2 justify-content-center">
                 <Col xs="auto" className='w-100'>
-                    <Button variant="secondary w-100" size="lg" block onClick={navigateToUsers}>
+                    <Button variant="primary w-100" size="lg" block onClick={navigateToUsers}>
                         Users
                     </Button>
                 </Col>
