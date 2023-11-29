@@ -90,44 +90,44 @@ export const AdminPatternsScreen = () => {
                 </Nav>
             </Container>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add pattern</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        {error && <div className="alert alert-danger">{error}</div>}
-                        <Form.Group className="mb-3" controlId="patternNameInput">
-                            <Form.Label>Pattern Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter pattern name"
-                                value={patternName}
-                                onChange={(e) => setPatternName(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="patternThemeInput">
-                            <Form.Label>Pattern Theme</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter pattern theme"
-                                value={patternTheme}
-                                onChange={(e) => setPatternTheme(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Add
-                        </Button>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            {/*<Modal show={showModal} onHide={() => setShowModal(false)}>*/}
+            {/*    <Modal.Header closeButton>*/}
+            {/*        <Modal.Title>Add pattern</Modal.Title>*/}
+            {/*    </Modal.Header>*/}
+            {/*    <Modal.Body>*/}
+            {/*        <Form onSubmit={handleSubmit}>*/}
+            {/*            {error && <div className="alert alert-danger">{error}</div>}*/}
+            {/*            <Form.Group className="mb-3" controlId="patternNameInput">*/}
+            {/*                <Form.Label>Pattern Name</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    type="text"*/}
+            {/*                    placeholder="Enter pattern name"*/}
+            {/*                    value={patternName}*/}
+            {/*                    onChange={(e) => setPatternName(e.target.value)}*/}
+            {/*                    required*/}
+            {/*                />*/}
+            {/*            </Form.Group>*/}
+            {/*            <Form.Group className="mb-3" controlId="patternThemeInput">*/}
+            {/*                <Form.Label>Pattern Theme</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    type="text"*/}
+            {/*                    placeholder="Enter pattern theme"*/}
+            {/*                    value={patternTheme}*/}
+            {/*                    onChange={(e) => setPatternTheme(e.target.value)}*/}
+            {/*                    required*/}
+            {/*                />*/}
+            {/*            </Form.Group>*/}
+            {/*            <Button variant="primary" type="submit">*/}
+            {/*                Add*/}
+            {/*            </Button>*/}
+            {/*        </Form>*/}
+            {/*    </Modal.Body>*/}
+            {/*    <Modal.Footer>*/}
+            {/*        <Button variant="secondary" onClick={() => setShowModal(false)}>*/}
+            {/*            Close*/}
+            {/*        </Button>*/}
+            {/*    </Modal.Footer>*/}
+            {/*</Modal>*/}
 
             <Modal show={showModal} onHide={() => { setShowModal(false); setIsEditMode(false); }}>
                 <Modal.Header closeButton>
@@ -156,8 +156,8 @@ export const AdminPatternsScreen = () => {
                                 required
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Add
+                        <Button variant="primary" type="submit" onClick={handleSubmit}>
+                            {isEditMode ? 'Update' : 'Add'}
                         </Button>
                     </Form>
                 </Modal.Body>
