@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Nav, Modal, Button, Form } from 'react-bootstrap';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
 import axios from 'axios';
 import './ProductAdminCss.css'
 
@@ -47,6 +50,8 @@ export const ProductsAdminScreen = () => {
     const [productPrice, setProductPrice] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [productImage, setProductImage] = useState('');
+    const [patterns, setPatterns] = useState([]);
+    const [selectedPattern, setSelectedPattern] = useState(null);
 
     const fetchProducts = async () => {
         try {
@@ -57,11 +62,21 @@ export const ProductsAdminScreen = () => {
                 setError('Received unexpected data format from the server');
             }
         } catch (err) {
-            setError(err.message);
+            setError(err.response.data.error.message);
         }
     };
 
     useEffect(() => {
+        const fetchPatterns = async () => {
+            try {
+                const response = await axios.get('/api/patterns');
+                setPatterns(response.data.data.patterns);
+            } catch (error) {
+                console.error('Error fetching patterns:', error);
+            }
+        };
+
+        fetchPatterns();
         fetchProducts();
     }, []);
 
@@ -76,6 +91,7 @@ export const ProductsAdminScreen = () => {
         setProductPrice(product.product_price);
         setProductDescription(product.product_description);
         setCurrentProductId(product.product_id);
+        setSelectedPattern(patterns.find(p => p.id === product.pattern_id));
         setIsEditMode(true);
         setShowModal(true);
     };
@@ -97,14 +113,18 @@ export const ProductsAdminScreen = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (!selectedPattern) {
+            setError('Please select a pattern');
+            return;
+        }
         const productData = {
             product_name: patternName,
             product_color: productColor,
             product_material: productMaterial,
             product_diameter: productDiameter,
             product_width: productWidth,
-            pattern_id: selectedPatternId,
-            product_count: productCount,
+            pattern_id: selectedPattern.pattern_id,
+            product_count: 0,
             product_price: productPrice,
             product_description: productDescription,
             product_image: productImage,
@@ -120,7 +140,7 @@ export const ProductsAdminScreen = () => {
             setIsEditMode(false);
             fetchProducts();
         } catch (err) {
-            setError(err.message);
+            setError(err.response.data.error.message);
         }
     };
 
@@ -130,7 +150,7 @@ export const ProductsAdminScreen = () => {
             fetchProducts();
             setShowQuantityModal(false);
         } catch (err) {
-            setError(err.message);
+            setError(err.response.data.error.message);
         }
     };
     const handleImageClick = () => {
@@ -145,7 +165,7 @@ export const ProductsAdminScreen = () => {
         reader.readAsDataURL(e.target.files[0]);
     };
     const handleDelete = async (productId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this account? This action cannot be undone.");
+        const confirmDelete = window.confirm("Are you sure you want to delete this product? This action cannot be undone.");
         if (confirmDelete) {
             try {
                 await axios.delete(`/api/products/${productId}`);
@@ -190,6 +210,20 @@ export const ProductsAdminScreen = () => {
                                 required
                             />
                         </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Autocomplete
+                                value={selectedPattern}
+                                onChange={(event, newValue) => {
+                                    setSelectedPattern(newValue);
+                                }}
+                                options={patterns}
+                                getOptionLabel={(option) => option.pattern_name}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Pattern" variant="outlined" />
+                                )}
+                            />
+                        </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Price</Form.Label>
                             <Form.Control
