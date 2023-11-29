@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button,  } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export const AdminScreen = () => {
@@ -13,38 +13,43 @@ export const AdminScreen = () => {
     const navigateToUsers = () => {
         navigate('/admin/users');
     };
+
     const navigateToProducts = () => {
         navigate('/admin/products');
     };
 
     return (
         <Container fluid className="admin-panel">
-            <Row>
-                <Col>
-                    <h2>Admin panel</h2>
+            <Row className="mt-4 justify-content-center align-items-center w-100">
+                <Col className="text-center">
+                    <h1>Admin panel</h1>
                 </Col>
             </Row>
-            <Row className="mt-4">
-                <Col>
-                    <Button variant="primary" size="lg" onClick={navigateToPatterns}>
+
+            <Row className="mt-4 justify-content-center">
+                <Col xs="auto" className='w-100'>
+                    <Button variant="primary w-100" size="lg" block onClick={navigateToPatterns}>
                         Patterns
                     </Button>
                 </Col>
             </Row>
-            <Row className="mt-4">
-                <Col>
-                    <Button variant="primary" size="lg" onClick={navigateToUsers}>
+
+            <Row className="mt-2 justify-content-center">
+                <Col xs="auto" className='w-100'>
+                    <Button variant="secondary w-100" size="lg" block onClick={navigateToUsers}>
                         Users
                     </Button>
                 </Col>
             </Row>
-            <Row className="mt-4">
-                <Col>
-                    <Button variant="primary" size="lg" onClick={navigateToProducts}>
+
+            <Row className="mt-2 justify-content-center">
+                <Col xs="auto" className='w-100'>
+                    <Button variant="primary w-100" size="lg" block onClick={navigateToProducts}>
                         Products
                     </Button>
                 </Col>
             </Row>
+
             {error && <div className="alert alert-danger">{error}</div>}
         </Container>
     );
