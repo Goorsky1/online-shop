@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Nav, Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
-import './ProductAdminCss.css'
+import './ProductsAdminScreen.css';
 
 const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
     return (
@@ -9,26 +9,31 @@ const Product = ({ product, onDelete, onEdit, onShowChangeQuantity }) => {
             <div className='adminProdFlex'>
                 <div className='textWrapper'>
                     <h2>{product.product_name}</h2>
-                    <h3>Quantity</h3>
-                    {product.product_count}
-                    <h3>Price</h3>
-                    {product.product_price} €
-
+                    <div className={"two-columns"}>
+                        <div>
+                            <h3>Quantity</h3>
+                            <p>{product.product_count}</p>
+                        </div>
+                        <div>
+                            <h3>Price</h3>
+                            <p>{product.product_price}€</p>
+                        </div>
+                    </div>
                 </div>
-                <div className='adminImgWrapper'>
-                    <img src={`data:image/jpg;base64,${product.product_image}`} alt={product.product_name} style={{ width: '300px', height: '150px' }} />
+                <div className='adminImgWrapper mb-2'>
+                    <img src={`data:image/jpg;base64,${product.product_image}`} alt={product.product_name} className="img-fluid" />
                 </div>
             </div>
-            <div className='buttons text-center'>
-                <Button variant="primary" onClick={() => onEdit(product)}>Edit</Button>
-                <Button variant="secondary" onClick={() => onShowChangeQuantity(product)}>Change Quantity</Button>
-                <Button variant="danger" onClick={() => onDelete(product.product_id)}>Delete</Button>
+            <div className='buttons-div text-center'>
+                <Button onClick={() => onShowChangeQuantity(product)} className="btn btn-primary func">Change Quantity</Button>
+                <Button onClick={() => onEdit(product)} className="btn btn-warning func">Edit</Button>
+                <Button onClick={() => onDelete(product.product_id)} className="btn btn-danger">Delete</Button>
             </div>
         </div>
     );
 };
 
-export const ProductsAdminScreen = () => {
+    export const ProductsAdminScreen = () => {
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [patternName, setPatternName] = useState('');
@@ -160,18 +165,18 @@ export const ProductsAdminScreen = () => {
         <>
             <Container className="my-5">
                 <Button variant="primary" onClick={() => setShowModal(true)}>Add products</Button>
-                <Nav className="flex-column">
+                <div className="row mt-3">
                     {products.map((product) => (
-                        <Product
-                            key={product.product_id}
-                            product={product}
-                            onDelete={() => handleDelete(product.product_id)}
-                            onShowChangeQuantity={() => handleShowChangeQuantity(product)}
-                            onEdit={() => handleEdit(product)}
-
-                        />
+                        <div key={product.product_id} className="col-md-4">
+                            <Product
+                                product={product}
+                                onDelete={() => handleDelete(product.product_id)}
+                                onShowChangeQuantity={() => handleShowChangeQuantity(product)}
+                                onEdit={() => handleEdit(product)}
+                            />
+                        </div>
                     ))}
-                </Nav>
+                </div>
             </Container>
 
 
